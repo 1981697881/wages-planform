@@ -11,36 +11,36 @@
             <el-dropdown-item command="2">用户</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>-->
-        <!--<el-dropdown @command="handlerBtn" trigger="click">
+        <el-dropdown @command="handlerBtn" trigger="click">
           <el-button :size="'mini'" type="primary">
-            新增<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
+            新增<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">用户组</el-dropdown-item>
-            <el-dropdown-item command="2">用户</el-dropdown-item>
+            <el-dropdown-item command="1">类别</el-dropdown-item>
+            <el-dropdown-item command="2">字典</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-dropdown @command="handlerAlter" trigger="click">
           <el-button :size="'mini'" type="primary">
-            修改<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
+            修改<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">用户组</el-dropdown-item>
-            <el-dropdown-item command="2">用户</el-dropdown-item>
+            <el-dropdown-item command="1">类别</el-dropdown-item>
+            <el-dropdown-item command="2">字典</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-dropdown @command="handlerDel" trigger="click">
           <el-button :size="'mini'" type="primary">
-            删除<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
+            删除<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">用户组</el-dropdown-item>
-            <el-dropdown-item command="2">用户</el-dropdown-item>
+            <el-dropdown-item command="1">类别</el-dropdown-item>
+            <el-dropdown-item command="2">字典</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>-->
-  <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handlerAdd">新增</el-button>
+        </el-dropdown>
+  <!--<el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handlerAdd">新增</el-button>
 <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
-<el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+<el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
             <!--<el-button style="float: right" :size="'mini'" type="primary" >权限管理</el-button>
             <el-button style="float: right" :size="'mini'" type="primary" >权限浏览</el-button>
         <el-button :size="'mini'" type="primary" icon="el-icon-error" @click="disable" >禁用</el-button>

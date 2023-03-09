@@ -1,6 +1,6 @@
 <template>
   <div class="app-list">
-    <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
+   <!-- <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'接入名称'" prop="select">
@@ -53,7 +53,7 @@
     </el-form>
     <div slot="footer" style="text-align:center;">
       <el-button type="primary" @click="saveData('form')">保存</el-button>
-  </div>
+  </div>-->
     <div class="list-containerOther">
       <div>
         <tabs-bar ref="tabs" @showDialog="handlerDialog" @exportData="exportData" @del="delivery" @queryBtn="query" @uploadList="upload"/>

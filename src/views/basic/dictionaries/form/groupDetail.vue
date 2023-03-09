@@ -3,18 +3,22 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'gpId'" style="display: none">
-            <el-input v-model="form.gpId"></el-input>
+          <el-form-item :label="'名称'" prop="fname">
+            <el-input v-model="form.fname"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="18" style="padding-left: 15%">
-          <el-form-item :label="'用户组名称'" prop="gpName">
-            <el-input v-model="form.gpName"></el-input>
+        <el-col :span="12">
+          <el-form-item :label="'编码'" prop="fnumber">
+            <el-input v-model="form.fnumber" ></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
+      </el-row><el-row :gutter="20">
+      <el-col :span="12">
+        <el-form-item :label="'描述'" prop="fdesc">
+          <el-input v-model="form.fdesc"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
     </el-form>
     <div slot="footer" style="text-align:center">
       <el-button type="primary" @click="saveData('form')">保存</el-button>
@@ -23,7 +27,7 @@
 </template>
 
 <script>
-  import {groupAdd, groupAlter} from "@/api/system/index";
+  import {addDictType} from "@/api/basic/index";
   export default {
     props: {
       gpInfo: {
@@ -34,22 +38,19 @@
     data() {
       return {
         form: {
-          gpId: null,
-          gpName: null, // 名称
-          gpLevel: -1,
+          fnumber: null,
+          fname: null, // 名称
+          fdesc: null,
         },
         pidS:[],
         pArray:[],
         rules: {
-          gpName: [
-            {required: true, message: '请输入名稱', trigger: 'blur'},
-          ],
-          gpLevel: [
-            {required: true, message: '请选择等级', trigger: 'change'},
-          ],
-
+          fnumber: [
+            {required: true, message: '请输入', trigger: 'blur'},
+          ],fname: [
+            {required: true, message: '请输入', trigger: 'blur'},
+          ]
         },
-        levelFormat: [[1,'一级'],[2,'二级']]
       };
     },
     created() {
@@ -65,22 +66,14 @@
         this.$refs[form].validate((valid) => {
           //判断必填项
           if (valid) {
-            if (typeof (this.form.gpId) != undefined && this.form.gpId != null) {
-              groupAlter(this.form).then(res => {
+            addDictType(this.form).then(res => {
                 this.$emit('hideGroupDialog', false)
                 this.$emit('uploadGroup')
-              });
-            } else {
-              groupAdd(this.form).then(res => {
-                this.$emit('hideGroupDialog', false)
-                this.$emit('uploadGroup')
-              });
-            }
+              })
           }else {
-            return false;
+            return false
           }
         })
-
       },
     }
   };

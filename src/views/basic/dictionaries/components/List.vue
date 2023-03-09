@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getUsersList, delUsers} from "@/api/system/index";
+import { getDictList, deleteDict} from "@/api/basic/index";
 import List from "@/components/List";
 
 export default {
@@ -35,12 +35,10 @@ export default {
       type: null,
         checkDate:null,
       columns: [
-        { text: "uid", name: "uid", default: false},
-        { text: "用户编码", name: "jobNum" },
-        { text: "登录账号", name: "username" },
-        { text: "对应职员", name: "empName" },
-          { text: "状态", name: "status" },
-        { text: "说明", name: "description" },
+        { text: "类别", name: "ftypeid" },
+        { text: "编码", name: "fnumber" },
+        { text: "名称", name: "fname" },
+        { text: "描述", name: "fdesc" },
 
       ]
     };
@@ -63,7 +61,7 @@ export default {
       this.$refs.select.blur()
     },
     Delivery(val) {
-      delUsers(val).then(res => {
+      deleteDict(val).then(res => {
         if(res.flag){
           this.$store.dispatch("list/setClickData", '');
           this.fetchData()
@@ -86,14 +84,14 @@ export default {
         pageSize: this.list.size || 50
       })
     },
-    fetchData(val, data = {
+    fetchData(val={}, data = {
       /*  fid: fid,
         type: type,*/
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
       this.loading = true;
-      getUsersList(data).then(res => {
+      getDictList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });

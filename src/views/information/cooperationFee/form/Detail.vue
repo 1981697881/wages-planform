@@ -3,8 +3,8 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'咨询老师'" prop="companyName">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+          <el-form-item :label="'咨询老师'" prop="fteacherid">
+            <el-select v-model="form.fteacherid" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -15,9 +15,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'日期'" prop="companyAddress">
+          <el-form-item :label="'日期'" prop="fdate">
             <el-date-picker
-              v-model="form.eur"
+              v-model="form.fdate"
               type="date"
               style="width: auto"
               placeholder="选择日期">
@@ -27,35 +27,35 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'成交业绩'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'成交业绩'" >
+            <el-input-number v-model="form.fperformanceamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'沙龙场数'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input-number v-model="form.fsalons"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'沙龙费用'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'沙龙费用'" >
+            <el-input-number v-model="form.fsalonamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'出勤天数'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input-number v-model="form.fattenddays"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'所属公司'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'所属公司'" >
+            <el-input v-model="form.fcompany"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'退款业绩'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input-number v-model="form.fretamount"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -67,7 +67,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addCooperationExp} from '@/api/information/index'
 
 export default {
   props: {
@@ -79,11 +79,13 @@ export default {
   data() {
     return {
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        fsalons: 0,
+        fsalonamt: 0,
+        fperformanceamt: 0,
+        fdate: null,
+        fteacherid: null,
+        fcompany: null,
+        fattenddays: 0,
       },
       options: [{
         value: '选项1',
@@ -94,13 +96,10 @@ export default {
       }],
       disPl: true,
       rules: {
-        companyName: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        companyAddress: [
-          {required: true, message: '请输入', trigger: 'blur'}
+        fteacherid: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ],fdate: [
+          {required: true, message: '请选择', trigger: 'change'}
         ]
       }
     }
@@ -115,7 +114,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addCooperationExp(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

@@ -49,52 +49,38 @@ export default {
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          axisPointer: {
+            type: 'shadow'
           }
         },
         grid: {
-          top: 10,
           left: '2%',
           right: '2%',
-          bottom: '3%',
+          bottom: '1%',
           containLabel: true
         },
-        xAxis: [{
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisTick: {
-            alignWithLabel: true
+        xAxis: [
+          {
+            type: 'category',
+            data: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14', '15', '16', '17','18', '19', '20','21', '22', '23', '24', '25', '26', '27','28', '29', '30',],
+            axisTick: {
+              alignWithLabel: true
+            }
           }
-        }],
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
+        ],
+        yAxis: [
+          {
+            type: 'value'
           }
-        }],
-        series: [{
-          name: 'pageA',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }]
+        ],
+        series: [
+          {
+            name: '份',
+            type: 'bar',
+            barWidth: '60%',
+            data: [10, 52, 200, 334, 390, 330, 220,14,123,22,100, 152, 20, 34, 39, 33, 210,140,23,220,100, 152, 20, 34, 39, 230, 120,114,112,122,]
+          }
+        ]
       })
     }
   }

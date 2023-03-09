@@ -368,7 +368,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addProject} from '@/api/information/index'
 
 export default {
   props: {
@@ -496,7 +496,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addProject(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

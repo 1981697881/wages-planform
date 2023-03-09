@@ -26,7 +26,7 @@
 
 <script>
   import {mapGetters} from "vuex";
-  import {getUsersTree, delGroup} from "@/api/system/index";
+  import {getDictTypeList, deleteDictType} from "@/api/basic/index";
   import List from "@/components/List";
   export default {
     components: {
@@ -46,7 +46,7 @@
       return {
         loading: false,
         columns: [
-          {text: "类型", name: "gpName"},
+          {text: "类型", name: "fname"},
         ],
         list: {},
       }
@@ -63,20 +63,22 @@
         this.$store.dispatch("list/setClickData", obj.row);
       },
       Delivery(val) {
-        delGroup(val).then(res => {
+        deleteDictType(val).then(res => {
           if(res.flag){
             this.$store.dispatch("list/setClickData", '');
             this.fetchData()
           }
         })
       },
-      fetchData() {
+      fetchData(val={}, data = {
+        pageNum: 1,
+        pageSize:  50
+      }) {
         this.loading = true;
-        getUsersTree().then(res => {
+        getDictTypeList(data, val).then(res => {
           this.loading = false;
-          this.list ={
-            records: res.data
-          }
+          this.list = res.data
+          this.list.total = 0
         });
       }
     }

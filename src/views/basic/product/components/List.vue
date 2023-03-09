@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getProductionList, deleteProduction } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -60,7 +60,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteProduction(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -81,11 +81,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getProductionList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getOrganizationsList, deleteOrganizations } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -30,9 +30,9 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '部门名称', name: 'companyName' },
-        { text: '上级部门', name: 'telephone' },
-        { text: '部门负责人', name: 'officialWebsite' },
+        { text: '部门名称', name: 'fdeptname' },
+        { text: '上级部门', name: 'fpname' },
+        { text: '部门负责人', name: 'fheader' },
       ]
     }
   },
@@ -51,7 +51,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteOrganizations(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -72,11 +72,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getOrganizationsList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

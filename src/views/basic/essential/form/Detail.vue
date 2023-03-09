@@ -3,25 +3,25 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'参数编码'" prop="select">
-            <el-input v-model="form.cn"></el-input>
+          <el-form-item :label="'参数编码'" prop="fkey">
+            <el-input v-model="form.fkey"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'参数名称'" prop="cn">
-            <el-input v-model="form.cn"></el-input>
+          <el-form-item :label="'参数名称'" prop="fname">
+            <el-input v-model="form.fname"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
 
         <el-col :span="12">
-          <el-form-item :label="'参数值'" prop="usm">
-            <el-input v-model="form.usm"></el-input>
+          <el-form-item :label="'参数值'" prop="fvalue">
+            <el-input v-model="form.fvalue"></el-input>
           </el-form-item>
         </el-col> <el-col :span="12">
-          <el-form-item :label="'描述'" prop="usm">
-            <el-input v-model="form.usm"></el-input>
+          <el-form-item :label="'描述'" >
+            <el-input v-model="form.fdesc"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script>import {createSizeColor} from '@/api/commodity/index'
+<script>import {updateProduction} from '@/api/commodity/index'
 
 export default {
   props: {
@@ -44,26 +44,19 @@ export default {
   data() {
     return {
       form: {
-        type: 1,
-        cn: null,
-        eur: null,
-        usm: null,
-        usw: null,
-        select: []
+        fkey: null,
+        fname: null,
+        fvalue: null,
+        fdesc: null,
       },
       rules: {
-        cn: [
+        fvalue: [
           {required: true, message: '请输入', trigger: 'blur'}
-        ],eur: [
+        ],fkey: [
           {required: true, message: '请输入', trigger: 'blur'}
-        ],usm: [
+        ],fname: [
           {required: true, message: '请输入', trigger: 'blur'}
-        ],usw: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        select: [
-          {required: true, message: '请选择', trigger: 'change'}
-        ],
+        ]
       }
     }
   },
@@ -77,9 +70,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          this.form.parentId = this.form.select[this.form.select.length-1]
-          this.form.parentIdList = this.form.select.join(',')
-          createSizeColor(this.form).then(res => {
+          updateProduction(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

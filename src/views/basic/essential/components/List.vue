@@ -17,7 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getSizeColorList, deleteSizeColor } from '@/api/commodity/index'
+import { getSystemProfileList, deleteSizeColor } from '@/api/commodity/index'
 import List from '@/components/List'
 
 export default {
@@ -36,10 +36,10 @@ export default {
       type: null,
 
       columns: [
-        { text: '参数编码', name: 'cn' },
-        { text: '参数名称', name: 'eur' },
-        { text: '参数值', name: 'usn' },
-        { text: '描述', name: 'usw' },
+        { text: '参数编码', name: 'fkey' },
+        { text: '参数名称', name: 'fname' },
+        { text: '参数值', name: 'fvalue' },
+        { text: '描述', name: 'fdesc' },
       ]
     }
   },
@@ -104,7 +104,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       /*this.loading = true
-      getSizeColorList(data, val).then(res => {
+      getSystemProfileList(data, val).then(res => {
         this.loading = false
         this.list = res.data
       })*/

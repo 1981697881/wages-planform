@@ -3,15 +3,15 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'收款类型'" prop="companyName">
-            <el-input v-model="form.companyName"></el-input>
+          <el-form-item :label="'收款类型'" prop="ftype">
+            <el-input v-model="form.ftype"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'是否计入业绩'" prop="companyAddress">
             <el-radio-group v-model="form.officialWebsite">
-              <el-radio :label="3">是</el-radio>
-              <el-radio :label="6">否</el-radio>
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addReceiveType} from '@/api/basic/index'
 
 export default {
   props: {
@@ -35,20 +35,12 @@ export default {
   data() {
     return {
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        ftype: null,
+        fisperformace: 0,
       },
       disPl: true,
       rules: {
-        companyName: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        companyAddress: [
+        ftype: [
           {required: true, message: '请输入', trigger: 'blur'}
         ]
       }
@@ -64,7 +56,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addReceiveType(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

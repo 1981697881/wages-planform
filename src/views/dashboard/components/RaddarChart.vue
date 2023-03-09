@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div style="margin-left: 15px" :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '200px'
     }
   },
   data() {
@@ -45,70 +45,101 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
+      const data1 = [
+        {
+          name: '华东: 70',
+          value: 70
+        },
+        {
+          name: '华南: 68',
+          value: 68
+        },
+        {
+          name: '华西: 48',
+          value: 48
+        },
+        {
+          name: '华北: 40',
+          value: 40
+        },
+        {
+          name: '华中: 100',
+          value: 100
+        }
+      ];
+      const data2 = [
+        {
+          name: '华东: 700000',
+          value: 700000
+        },
+        {
+          name: '华南: 680000',
+          value: 680000
+        },
+        {
+          name: '华西: 480000',
+          value: 480000
+        },
+        {
+          name: '华北: 400000',
+          value: 400000
+        },
+        {
+          name: '华中: 10000000',
+          value: 1000000
+        }
+      ];
       this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        radar: {
-          radius: '66%',
-          center: ['50%', '42%'],
-          splitNumber: 8,
-          splitArea: {
-            areaStyle: {
-              color: 'rgba(127,95,132,.3)',
-              opacity: 1,
-              shadowBlur: 45,
-              shadowColor: 'rgba(0,0,0,.5)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 15
-            }
+        title: [
+          {
+            text: '区域销售统计表',
+            left: 'center'
           },
-          indicator: [
-            { name: 'Sales', max: 10000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
-          ]
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
-        },
-        series: [{
-          type: 'radar',
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              shadowBlur: 13,
-              shadowColor: 'rgba(0,0,0,.2)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 10,
-              opacity: 1
-            }
+          {
+            subtext: '销售数量',
+            left: '23.67%',
+            top: '75%',
+            textAlign: 'center'
           },
-          data: [
-            {
-              value: [5000, 7000, 12000, 11000, 15000, 14000],
-              name: 'Allocated Budget'
+          {
+            subtext: '销售金额(万元)',
+            left: '75%',
+            top: '75%',
+            textAlign: 'center'
+          },
+        ],
+        series: [
+          {
+            type: 'pie',
+            radius: '25%',
+            center: ['50%', '50%'],
+            data: data2,
+            label: {
+              position: 'outer',
+              alignTo: 'none',
+              bleedMargin: 5
             },
-            {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: 'Expected Spending'
+            left: 0,
+            right: '50%',
+            top: 0,
+            bottom: 0
+          },
+          {
+            type: 'pie',
+            radius: '25%',
+            center: ['50%', '50%'],
+            data: data1,
+            label: {
+              position: 'outer',
+              alignTo: 'labelLine',
+              bleedMargin: 5
             },
-            {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: 'Actual Spending'
-            }
-          ],
-          animationDuration: animationDuration
-        }]
+            left: '50%',
+            right: 0,
+            top: 0,
+            bottom: 0
+          },
+        ]
       })
     }
   }

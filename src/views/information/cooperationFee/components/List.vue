@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getCooperationExpList, deleteCooperationExp } from '@/api/information/index'
 import List from '@/components/List'
 
 export default {
@@ -30,14 +30,14 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '咨询老师', name: 'companyName' },
-        { text: '日期', name: 'telephone' },
-        { text: '成交业绩', name: 'officialWebsite' },
-        { text: '沙龙场数', name: 'companyAddress' },
-        { text: '沙龙费用', name: 'remark' },
-        { text: '出勤天数', name: 'status' },
-        { text: '所属公司', name: 'status' },
-        { text: '退款业绩', name: 'status' },
+        { text: '咨询老师', name: 'fteacherid' },
+        { text: '日期', name: 'fdate' },
+        { text: '成交业绩', name: 'fperformanceamt' },
+        { text: '沙龙场数', name: 'fsalons' },
+        { text: '沙龙费用', name: 'fsalonamt' },
+        { text: '出勤天数', name: 'fattenddays' },
+        { text: '所属公司', name: 'fcompany' },
+        { text: '退款业绩', name: 'fretamount' },
       ]
     }
   },
@@ -56,7 +56,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteCooperationExp(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -77,11 +77,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getCooperationExpList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

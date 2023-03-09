@@ -93,7 +93,8 @@
       // 列
       type: Array,
       default: null
-    }, tree: {
+    },
+    tree: {
       // 列
       type: Object,
       default: () => {

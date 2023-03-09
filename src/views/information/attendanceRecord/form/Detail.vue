@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addCompany} from '@/api/information/index'
 
 export default {
   props: {

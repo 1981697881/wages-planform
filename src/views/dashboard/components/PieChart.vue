@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div style="margin-left: 15px" :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '200px'
     }
   },
   data() {
@@ -43,33 +43,38 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
       this.chart.setOption({
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        title: {
+          text: '前10产品销售统计表',
+          left: 'center'
         },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+        tooltip: {
+          trigger: 'item'
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: 'Access From',
             type: 'pie',
-            roseType: 'radius',
-            radius: [15, 95],
-            center: ['50%', '38%'],
+            radius: '50%',
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 1048, name: '2304-原味开心果480g' },
+              { value: 735, name: '2361-碧根果220g' },
+              { value: 580, name: '2308-紫皮腰果220g' },
+              { value: 484, name: '2350-综合果仁380g' },
+              { value: 300, name: '2325-盐焗巴旦木果仁500g' },
+              { value: 200, name: '2326-甄选。坚果礼1850g' },
+              { value: 1100, name: '2326-缤纷。坚果礼1410g' },
+              { value: 100, name: '2339-黑加仑葡萄干750g' },
+              { value: 280, name: '2303-原味开心果360g' },
+              { value: 600, name: '2306-原味开心果400g' },
             ],
-            animationEasing: 'cubicInOut',
-            animationDuration: 2600
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
           }
         ]
       })

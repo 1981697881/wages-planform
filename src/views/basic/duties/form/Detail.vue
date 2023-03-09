@@ -3,18 +3,18 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="150px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'职务名称'" prop="companyName">
-            <el-input v-model="form.companyName"></el-input>
+          <el-form-item :label="'职务名称'" prop="fdutyname">
+            <el-input v-model="form.fdutyname"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'上级职务'" prop="companyAddress">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+          <el-form-item :label="'上级职务'">
+            <el-select v-model="form.fparentname" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in options"
+                :key="index"
+                :label="item.fdutyname"
+                :value="item.fid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -23,9 +23,9 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'是否提成'">
-            <el-radio-group v-model="form.officialWebsite">
-              <el-radio :label="3">是</el-radio>
-              <el-radio :label="6">否</el-radio>
+            <el-radio-group v-model="form.fiscomm">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -37,7 +37,7 @@
 </div>
   </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addDuty,getDutyList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -49,43 +49,39 @@ export default {
   data() {
     return {
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        fdutyname: null,
+        fparentname: null,
+        fiscomm: 0,
       },
-      options: [{
-        value: '选项1',
-        label: '选项1'
-      }, {
-        value: '选项2',
-        label: '选项2'
-      }],
+      options: [],
       disPl: true,
       rules: {
-        companyName: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        companyAddress: [
+        fdutyname: [
           {required: true, message: '请输入', trigger: 'blur'}
         ]
       }
     }
   },
   mounted() {
+    this.fetchData()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    fetchData(val={}, data = {
+      pageNum: 1,
+      pageSize:  50
+    }) {
+      getDutyList(data, val).then(res => {
+        this.options = res.data.records
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addDuty(this.form).then(res => {
             this.$emit('hideDialog', false)
           this.$emit('uploadList')
         })

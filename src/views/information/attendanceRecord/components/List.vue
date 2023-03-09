@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getCompanyList, deleteCompany } from '@/api/information/index'
 import List from '@/components/List'
 
 export default {
@@ -30,12 +30,12 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '年', name: 'companyName' },
-        { text: '月', name: 'telephone' },
-        { text: '员工姓名', name: 'officialWebsite' },
-        { text: '应出勤天数', name: 'companyAddress' },
-        { text: '实际出勤天数', name: 'remark' },
-        { text: '出勤率', name: 'status' }
+        { text: '年', name: 'fyear' },
+        { text: '月', name: 'fmonth' },
+        { text: '员工姓名', name: 'fempid' },
+        { text: '应出勤天数', name: 'freqdays' },
+        { text: '实际出勤天数', name: 'factdays' },
+        { text: '出勤率', name: 'fattendrate' }
       ]
     }
   },
