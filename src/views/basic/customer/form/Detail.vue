@@ -3,25 +3,30 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'档案号'" prop="companyName">
-            <el-input v-model="form.companyName"></el-input>
+          <el-form-item :label="'档案号'" prop="fnumber">
+            <el-input v-model="form.fnumber"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'顾客姓名'" prop="companyAddress">
-            <el-input v-model="form.companyAddress"></el-input>
+          <el-form-item :label="'顾客姓名'" prop="fname">
+            <el-input v-model="form.fname"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'出生日期'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'出生日期'" prop="fbirthdate">
+            <el-date-picker
+              v-model="form.fbirthdate"
+              type="date"
+              style="width: auto"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'身份证号'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.fidno"></el-input>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -32,18 +37,18 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'年龄'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.fage"></el-input>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'性别'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'性别'">
+            <el-input v-model="form.fsex"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'负责老师'">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+            <el-select v-model="form.fdesigner" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -55,8 +60,8 @@
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'业务员'" prop="telephone">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+          <el-form-item :label="'业务员'">
+            <el-select v-model="form.fmanager" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -68,32 +73,32 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'备注'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.fnote"></el-input>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'店家员工'" prop="telephone">
-            <el-radio-group v-model="form.officialWebsite">
-              <el-radio :label="3">是</el-radio>
-              <el-radio :label="6">否</el-radio>
+          <el-form-item :label="'店家员工'">
+            <el-radio-group v-model="form.finternal">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'打版金额'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.fpatternamt"></el-input>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'抵扣打版金额'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.fusepatternamt"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'未抵扣金额'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input v-model="form.funpatteramt"></el-input>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -135,7 +140,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addCustom} from '@/api/basic/index'
 
 export default {
   props: {
@@ -167,8 +172,8 @@ export default {
       },
       list: [],
       columns: [
-        { text: '修改人', name: 'gpName' },
-        { text: '修改时间', name: 'gpLevel'},
+        { text: '修改人', name: 'fmanager' },
+        { text: '修改时间', name: 'falterdate'},
       ],
       disPl: true,
       rules: {
@@ -193,7 +198,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addCustom(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getSupplierList, deleteSupplier } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -30,13 +30,13 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text:'部门', name: 'companyName' },
-        { text: '开发人', name: 'telephone' },
-        { text: '供应商名称', name: 'officialWebsite' },
-        { text: '介绍费', name: 'companyAddress' },
-        { text: '介绍费方式', name: 'remark' },
-        { text: '合同起始时间', name: 'remark' },
-        { text: '合同结束时间', name: 'status' },
+        { text:'部门', name: 'fdept' },
+        { text: '开发人', name: 'fsales' },
+        { text: '供应商名称', name: 'fname' },
+        { text: '介绍费', name: 'fcommision' },
+        { text: '介绍费分成', name: 'fcommdiv' },
+        { text: '合同起始时间', name: 'fstartdate' },
+        { text: '合同结束时间', name: 'fenddate' },
       ]
     }
   },
@@ -55,7 +55,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteSupplier(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -76,11 +76,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getSupplierList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

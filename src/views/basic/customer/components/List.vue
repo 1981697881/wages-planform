@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getCustomDictList, deleteCustom } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -30,12 +30,12 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text:'顾客姓名', name: 'companyName' },
-        { text: '出生日期', name: 'telephone' },
-        { text: '年龄', name: 'officialWebsite' },
-        { text: '性别', name: 'companyAddress' },
-        { text: '负责老师(设计师)', name: 'remark' },
-        { text: '业务员', name: 'remark' },
+        { text:'顾客姓名', name: 'fname' },
+        { text: '出生日期', name: 'fbirthdate' },
+        { text: '年龄', name: 'fage' },
+        { text: '性别', name: 'fsex' },
+        { text: '负责老师(设计师)', name: 'fdesigner' },
+        { text: '业务员', name: 'fmanager' },
         { text: '末次月经', name: 'status' },
         { text: '药物过敏', name: 'status' },
         { text: '备注', name: 'status' },
@@ -57,7 +57,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteCustom(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -79,7 +79,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      getCustomDictList(data, val).then(res => {
         this.loading = false
         this.list = res.data
       })*/

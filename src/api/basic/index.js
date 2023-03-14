@@ -376,5 +376,80 @@ export function deleteReceiveType(params) {
     method: 'POST',
     data: params
   })
+}// 供应商-获取列表
+export function getSupplierList(params, query) {
+  const url = '/supplier/supplierList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 供应商-新增
+export function addSupplier(params) {
+  return request({
+    url: '/supplier/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 供应商-删除
+export function deleteSupplier(params) {
+  return request({
+    url: '/supplier/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 客户-获取列表
+export function getCustomDictList(params, query) {
+  const url = '/custom/dictList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 客户-新增
+export function addCustom(params) {
+  return request({
+    url: '/custom/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 客户-删除
+export function deleteCustom(params) {
+  return request({
+    url: '/custom/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
 }
 

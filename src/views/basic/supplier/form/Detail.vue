@@ -1,50 +1,64 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'部门'" prop="companyName">
-            <el-input v-model="form.companyName"></el-input>
+          <el-form-item :label="'部门'" prop="fdept">
+            <el-select multiple v-model="form.fdept" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'业务人员'" prop="companyAddress">
-            <el-input v-model="form.companyAddress"></el-input>
+          <el-form-item :label="'业务人员'" prop="fsales">
+            <el-select multiple v-model="form.fsales" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'供应商名称'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'供应商名称'" prop="fname">
+            <el-input v-model="form.fname"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'介绍费'">
-            <el-input v-model="form.officialWebsite"></el-input>
+            <el-input-number v-model="form.fcommision"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'介绍费分成'" prop="telephone">
-            <el-input v-model="form.telephone"></el-input>
+          <el-form-item :label="'介绍费分成'">
+            <el-input v-model="form.fcommdiv"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'合同起始时间'">
+          <el-form-item :label="'合同起始时间'" prop="fstartdate">
             <el-date-picker
-              v-model="form.eur"
+              v-model="form.fstartdate"
               type="date"
               style="width: auto"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row><el-row :gutter="20" prop="fenddate">
         <el-col :span="12">
           <el-form-item :label="'合同结束时间'">
             <el-date-picker
-              v-model="form.eur"
+              v-model="form.fenddate"
               type="date"
               style="width: auto"
               placeholder="选择日期">
@@ -53,7 +67,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'回款银行'">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+            <el-select v-model="form.fbank" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -65,9 +79,9 @@
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'启动日期'" prop="telephone">
+          <el-form-item :label="'启动日期'" prop="fstartdate">
             <el-date-picker
-              v-model="form.eur"
+              v-model="form.fstartdate"
               type="date"
               style="width: auto"
               placeholder="选择日期">
@@ -75,8 +89,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'服务老师'">
-            <el-select v-model="form.companyAddress" placeholder="请选择">
+          <el-form-item :label="'服务老师'" prop="fserice">
+            <el-select v-model="form.fserice" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -114,7 +128,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {deleteSupplier} from '@/api/basic/index'
 
 export default {
   props: {
@@ -138,11 +152,15 @@ export default {
         label: '选项2'
       }],
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        fdept: null,
+        fsales: null,
+        fname: null,
+        fcommision: 0,
+        fcommdiv: null,
+        fstartdate: null,
+        fenddate: null,
+        fbank: null,
+        fserice: null
       },
       list: [],
       columns: [
@@ -151,14 +169,22 @@ export default {
       ],
       disPl: true,
       rules: {
-        companyName: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        companyAddress: [
+        fdept: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ], fsales: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ], fstartdate: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ],fenddate: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ],fbank: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ],fserice: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ], fname: [
           {required: true, message: '请输入', trigger: 'blur'}
         ]
+
       }
     }
   },
@@ -172,7 +198,7 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          deleteSupplier(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

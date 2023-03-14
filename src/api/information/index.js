@@ -117,3 +117,42 @@ export function deleteProject(params) {
   })
 }
 
+// 项目财务信息-获取列表
+export function getProjectFinanceList(params, query) {
+  const url = '/projectFinance/projectFinanceList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 项目财务信息-新增
+export function addProjectFinance(params) {
+  return request({
+    url: '/projectFinance/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 项目财务信息-删除
+export function deleteProjectFinance(params) {
+  return request({
+    url: '/projectFinance/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+
