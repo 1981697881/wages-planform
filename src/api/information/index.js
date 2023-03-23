@@ -154,5 +154,79 @@ export function deleteProjectFinance(params) {
     method: 'POST',
     data: params
   })
+}// 销售方案-获取列表
+export function getSalePrjList(params, query) {
+  const url = '/salePrj/salePrjList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+// 销售方案-新增
+export function addSalePrj(params) {
+  return request({
+    url: '/salePrj/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 销售方案-删除
+export function deleteSalePrj(params) {
+  return request({
+    url: '/salePrj/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 销售记录-获取列表
+export function getSalePrjListList(params, query) {
+  const url = '/salePrjList/salePrjList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 销售记录-新增
+export function addSalePrjList(params) {
+  return request({
+    url: '/salePrjList/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 销售记录-删除
+export function deleteSalePrjList(params) {
+  return request({
+    url: '/salePrjList/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
 }
 

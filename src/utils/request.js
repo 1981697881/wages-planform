@@ -65,7 +65,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-       if(res.status === 20010){//需要重新登录
+      if (res.status === 20010){ // 需要重新登录
         store.dispatch('user/resetToken').then(() => {
           //location.reload()
           MessageBox('登录出错, 是否重试?', '提示', {
@@ -98,17 +98,17 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.msg || 'Error'))
     } else {
-      if(res.msg!="登陆成功" && res.msg!=null) {
+      if(res.msg != "登陆成功" && res.msg!=null) {
         if(res.status == 20000){
           Message({
-            message:res.msg,
-            type:'success',
+            message: res.msg,
+            type: 'success',
             duration: 5 * 1000
           })
         } else {
           Message({
-            message:res.msg,
-            type:'error',
+            message: res.msg,
+            type: 'error',
             duration: 5 * 1000
           })
         }
@@ -135,6 +135,9 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     })
+    /* store.dispatch('user/resetToken').then(() => {
+       location.reload()
+     })*/
     return Promise.reject(error)
   }
 )

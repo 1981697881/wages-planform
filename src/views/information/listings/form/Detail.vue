@@ -234,59 +234,59 @@
       <el-tab-pane label="财务信息" name="second">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item :label="'总收款金额'" prop="companyName">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'总收款金额'">
+              <el-input-number :min="0" v-model="finance.fallamt"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'退款金额'" prop="companyAddress">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'退款金额'">
+              <el-input-number :min="0" v-model="finance.fretamt"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'支付金额'" prop="companyAddress">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <el-form-item :label="'未收款金额'" prop="companyName">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'佣金'" prop="companyAddress">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'打板提成'" prop="companyAddress">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'支付金额'" >
+              <el-input-number :min="0" v-model="finance.fpayamt"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item :label="'店铺收款金额'" prop="companyName">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'未收款金额'">
+              <el-input-number :min="0" v-model="finance.funrecamt"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'回款金额'" prop="companyName">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'佣金'" >
+              <el-input-number :min="0" v-model="finance.fcommamt"></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item :label="'店家员工'" prop="companyAddress">
-              <el-input-number :min="0" v-model="form.companyName"></el-input-number>
+            <el-form-item :label="'打板提成'" >
+              <el-input-number :min="0" v-model="finance.fplateamt"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-form-item :label="'返还打版金'" prop="companyName">
-              <el-input v-model="form.companyName"></el-input>
+            <el-form-item :label="'店铺收款金额'">
+              <el-input-number :min="0" v-model="finance.fshoprecamt"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'回款金额'">
+              <el-input-number :min="0" v-model="finance.frealamt"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'店家员工'" prop="fopername">
+              <el-input v-model="finance.companyName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item :label="'返还打版金'">
+              <el-input-number v-model="finance.fshopemp"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -448,6 +448,18 @@ export default {
         fservicer: null,
         fshopname: null,
         tProjectDetails: [],
+      },
+      finance: {
+        fallamt: 0,
+        fretamt: 0,
+        fpayamt: 0,
+        funrecamt: 0,
+        fcommamt: 0,
+        fplateamt: 0,
+        fshoprecamt: 0,
+        frealamt: 0,
+        fopername: null,
+        fshopemp: 0
       },
       list1: [],
       columns1: [

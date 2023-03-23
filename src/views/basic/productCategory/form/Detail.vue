@@ -3,8 +3,20 @@
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'产品类型'" prop="companyName">
-            <el-input v-model="form.companyName"></el-input>
+          <el-form-item :label="'产品类型'" prop="ftype">
+            <el-input v-model="form.ftype"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'上级类型'">
+            <el-select style="width: 100%"  v-model="form.fparentid" placeholder="请选择">
+              <el-option
+                v-for="(item,index) in options"
+                :key="index"
+                :label="item.ftype"
+                :value="item.fid">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -15,7 +27,7 @@
   </div>
 </template>
 
-<script>import {addCompany} from '@/api/basic/index'
+<script>import {addProductionType,getProductionTypeList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -27,36 +39,38 @@ export default {
   data() {
     return {
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        ftype: null,
+        fparentid: null,
       },
       disPl: true,
+      options: [],
       rules: {
-        companyName: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
-          {required: true, message: '请输入', trigger: 'blur'}
-        ],
-        companyAddress: [
+        ftype: [
           {required: true, message: '请输入', trigger: 'blur'}
         ]
       }
     }
   },
   mounted() {
+    this.fetchData()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    fetchData(val={}, data = {
+      pageNum: 1,
+      pageSize:  500
+    }) {
+      getProductionTypeList(data, val).then(res => {
+        this.options = res.data.records
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          addCompany(this.form).then(res => {
+          addProductionType(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })

@@ -2,7 +2,56 @@ import request from '@/utils/request'
 import {
   getToken
 } from '@/utils/auth'
-
+// 用户管理-获取列表
+export function getUsersList(data) {
+  const url = '/Admin/user/list/' + data.pageNum + '/' + data.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
+  })
+}
+// 用户管理-新增
+export function addUsers(params) {
+  const url = '/Admin/user/add/'
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    data: params
+  })
+}
+// 用户管理-修改
+export function alterUsers(params) {
+  const url = '/Admin/user/update/'
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 用户管理-删除
+export function delUsers(params) {
+  const url = '/Admin/user/delete/' + params
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
+  })
+}
 // 职员管理-获取列表
 export function getClerkList(params, query) {
   const url = '/Admin/employee/list/' + params.pageNum + '/' + params.pageSize

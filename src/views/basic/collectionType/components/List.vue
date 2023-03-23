@@ -30,8 +30,8 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '收款类型', name: 'companyName' },
-        { text: '是否计入业绩', name: 'telephone' },
+        { text: '收款类型', name: 'ftype' },
+        { text: '是否计入业绩', name: 'fisperformace' },
       ]
     }
   },

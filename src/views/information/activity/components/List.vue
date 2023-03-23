@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getSalePrjList, deleteSalePrj } from '@/api/information/index'
 import List from '@/components/List'
 
 export default {
@@ -30,16 +30,16 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '方案号', name: 'companyName' },
-        { text: '方案名称', name: 'telephone' },
-        { text: '方案内容', name: 'officialWebsite' },
-        { text: '部门', name: 'companyAddress' },
-        { text: '开始日期', name: 'remark' },
-        { text: '结束日期', name: 'status' },
-        { text: '卡项金额', name: 'status' },
-        { text: '门店奖励', name: 'status' },
-        { text: '返款比例', name: 'status' },
-        { text: '销售人员奖励', name: 'status' },
+        { text: '方案号', name: 'fnumber' },
+        { text: '方案名称', name: 'fname' },
+        { text: '方案内容', name: 'fdesc' },
+        { text: '部门', name: 'fdeptid' },
+        { text: '开始日期', name: 'fstartdate' },
+        { text: '结束日期', name: 'fenddate' },
+        { text: '卡项金额', name: 'famount' },
+        { text: '门店奖励', name: 'fshopreward' },
+        { text: '返款比例', name: 'frewardrate' },
+        { text: '销售人员奖励', name: 'fsalerreward' },
       ]
     }
   },
@@ -58,7 +58,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteSalePrj(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -79,11 +79,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getSalePrjList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

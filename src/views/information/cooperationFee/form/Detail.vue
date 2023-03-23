@@ -6,10 +6,10 @@
           <el-form-item :label="'咨询老师'" prop="fteacherid">
             <el-select v-model="form.fteacherid" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in userList"
+                :key="index"
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -68,6 +68,7 @@
 </template>
 
 <script>import {addCooperationExp} from '@/api/information/index'
+import {getUsersList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -86,6 +87,7 @@ export default {
         fteacherid: null,
         fcompany: null,
         fattenddays: 0,
+        fretamount: 0,
       },
       options: [{
         value: '选项1',
@@ -94,6 +96,7 @@ export default {
         value: '选项2',
         label: '选项2'
       }],
+      userList: [],
       disPl: true,
       rules: {
         fteacherid: [
@@ -105,11 +108,20 @@ export default {
     }
   },
   mounted() {
+    this.getUsersArray()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    getUsersArray(val={}, data = {
+      pageNum: 1,
+      pageSize: 1000
+    }) {
+      getUsersList(data, val).then(res => {
+        this.userList = res.data.records
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项

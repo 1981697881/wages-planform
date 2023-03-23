@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getProductionTypeList, deleteOrganizations } from '@/api/basic/index'
+import { getProductionTypeList, deleteProductionType } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -49,7 +49,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteOrganizations(val).then(res => {
+      deleteProductionType(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')

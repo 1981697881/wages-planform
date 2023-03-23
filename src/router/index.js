@@ -66,7 +66,8 @@ export const StaticRouterMap = [{
       component: () => import('@/views/basic/clerk/index'),
       name: 'Clerk',
       meta: {
-        title: '员工管理'
+        title: '员工管理',
+        noCache: true
       }
     },{
       path: 'organizational',

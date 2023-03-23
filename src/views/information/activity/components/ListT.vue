@@ -12,9 +12,8 @@
     />
   </div>
 </template>
-
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getSalePrjListList, deleteSalePrjList } from '@/api/information/index'
 import List from '@/components/List'
 
 export default {
@@ -29,18 +28,18 @@ data() {
     loading: false,
     list: {},
     columns: [
-      { text: '销售日期', name: 'companyName' },
-      { text: '方案号', name: 'telephone' },
-      { text: '方案名称', name: 'officialWebsite' },
-      { text: '方案内容', name: 'companyAddress' },
-      { text: '部门', name: 'remark' },
-      { text: '门店', name: 'status' },
-      { text: '销售人员', name: 'status' },
-      { text: '卡项金额', name: 'status' },
-      { text: '数量', name: 'status' },
-      { text: '剩余数量', name: 'status' },
-      { text: '开始日期', name: 'status' },
-      { text: '结束日期', name: 'status' },
+      { text: '销售日期', name: 'fsaledate' },
+      { text: '方案号', name: 'fnumber' },
+      { text: '方案名称', name: 'fname' },
+      { text: '方案内容', name: 'fdesc' },
+      { text: '部门', name: 'fdeptid' },
+      { text: '门店', name: 'fsupplyid' },
+      { text: '销售人员', name: 'fsalerid' },
+      { text: '卡项金额', name: 'famount' },
+      { text: '数量', name: 'fqty' },
+      { text: '剩余数量', name: 'fremainqtu' },
+      { text: '开始日期', name: 'fstartdate' },
+      { text: '结束日期', name: 'fenddate' },
     ]
   }
 },
@@ -59,7 +58,7 @@ methods: {
     this.$emit('showDialog', obj.row)
   },
   Delivery(val) {
-    deleteCompany(val).then(res => {
+    deleteSalePrjList(val).then(res => {
       if (res.flag) {
       this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
@@ -80,11 +79,11 @@ methods: {
     pageNum: this.list.current || 1,
     pageSize: this.list.size || 50
   }) {
-    /*this.loading = true
-     getCompanyList(data, val).then(res => {
+    this.loading = true
+     getSalePrjListList(data, val).then(res => {
      this.loading = false
      this.list = res.data
-     })*/
+     })
   }
 }
 }

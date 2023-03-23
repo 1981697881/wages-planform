@@ -15,6 +15,7 @@
           <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handlerAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAdjust">调整</el-button>
           <!--<el-button :size="'mini'" type="primary" icon="el-icon-error" @click="disable" >禁用</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-success" @click="enable" >启用</el-button>-->
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
@@ -53,14 +54,14 @@ export default {
       this[method]()
     },
     Delivery() {
-      if (this.clickData.eid) {
+      if (this.clickData.uid) {
         this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$emit('delList', {
-            eid: this.clickData.eid
+            uid: this.clickData.uid
           })
         }).catch(() => {
           this.$message({
@@ -76,8 +77,17 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.eid) {
+      if (this.clickData.uid) {
         this.$emit('showDialog', this.clickData)
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        })
+      }
+    },handlerAdjust() {
+      if (this.clickData.uid) {
+        this.$emit('adjustDialog', this.clickData)
       } else {
         this.$message({
           message: '无选中行',
@@ -86,7 +96,7 @@ export default {
       }
     },
     disable() {
-      if (this.clickData.eid) {
+      if (this.clickData.uid) {
         this.clickData.disable = true
         alterClerk(this.clickData).then(res => {
           if(res.flag) {
@@ -101,7 +111,7 @@ export default {
       }
     },
     enable() {
-      if (this.clickData.eid) {
+      if (this.clickData.uid) {
         this.clickData.disable = false
         alterClerk(this.clickData).then(res => {
           if(res.flag){

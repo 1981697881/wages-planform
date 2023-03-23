@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'上级部门'" prop="fparentname">
+          <el-form-item :label="'上级部门'">
             <el-select v-model="form.fparentname" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
@@ -25,10 +25,10 @@
           <el-form-item :label="'部门负责人'" prop="fheader">
             <el-select v-model="form.fheader" placeholder="请选择">
               <el-option
-                v-for="(item,index) in userOptions"
+                v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.label"
-                :value="item.value">
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script>import {addOrganizations,getOrganizationsList} from '@/api/basic/index'
+<script>import {addOrganizations,getOrganizationsList,getUsersList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -75,11 +75,11 @@ export default {
         fdeptname: null,
         fparentname: null,
         fheader: null,
-        fisno: null,
-        fgettype: null,
+        fisno: 0,
+        fgettype: '全款',
       },
       options: [],
-      userOptions: [],
+      usersList: [],
       disPl: true,
       rules: {
         fdeptname: [
@@ -101,17 +101,18 @@ export default {
   methods: {
     fetchData(val={}, data = {
       pageNum: 1,
-      pageSize:  50
+      pageSize:  500
     }) {
       getOrganizationsList(data, val).then(res => {
         this.options = res.data.records
       });
-    },fetchUserData(val={}, data = {
+    },
+    fetchUserData(val={}, data = {
       pageNum: 1,
-      pageSize:  50
+      pageSize:  500
     }) {
-      getOrganizationsList(data, val).then(res => {
-        this.userOptions = res.data.records
+      getUsersList(data, val).then(res => {
+        this.usersList = res.data.records
       });
     },
     saveData(form) {

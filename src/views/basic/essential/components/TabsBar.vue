@@ -76,7 +76,7 @@ export default {
         }).then(() => {
           var idArray = []
           this.selections.forEach((item) => {
-            idArray.push({id: item.id})
+            idArray.push({fid: item.fid})
           })
           this.$emit('del', idArray)
         }).catch(() => {
@@ -93,7 +93,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({

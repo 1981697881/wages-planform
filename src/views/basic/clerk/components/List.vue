@@ -6,7 +6,6 @@
       :loading="loading"
       :list="list"
       index
-      type
       @handle-size="handleSize"
       @handle-current="handleCurrent"
       @row-click="rowClick"
@@ -16,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getClerkList, delClerk } from '@/api/basic/index'
+import { getUsersList, delUsers } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -31,19 +30,19 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '工号', name: 'jobNum' },
+        { text: '工号', name: 'fnumber' },
         { text: '用户名称', name: 'username' },
-        { text: '联系电话', name: 'tel' },
+        { text: '联系电话', name: 'fphone' },
         { text: '邮箱', name: 'tel' },
         { text: '岗位', name: 'tel' },
-        { text: '职位(角色)', name: 'tel' },
-        { text: '部门', name: 'tel' },
-        { text: '带教老师', name: 'tel' },
-        { text: '上级领导', name: 'tel' },
+        { text: '职位(角色)', name: 'fduty' },
+        { text: '部门', name: 'fdept' },
+        { text: '带教老师', name: 'fteacher' },
+        { text: '上级领导', name: 'fheader' },
         { text: '下级职员', name: 'tel' },
-        { text: '入职日期', name: 'tel' },
-        { text: '转正日期', name: 'tel' },
-        { text: '离职日期', name: 'tel' },
+        { text: '入职日期', name: 'fjoindate' },
+        { text: '转正日期', name: 'fregulardate' },
+        { text: '离职日期', name: 'fdeparturedate' },
         { text: '描述', name: 'remark' },
       ]
     }
@@ -63,7 +62,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      delClerk(val).then(res => {
+      delUsers(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -84,11 +83,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getClerkList(data, val).then(res => {
+      this.loading = true
+      getUsersList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

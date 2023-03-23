@@ -16,10 +16,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'性别'">
-            <el-radio-group v-model="form.fgender">
-              <el-radio :label="'男'">男</el-radio>
-              <el-radio :label="'女'">女</el-radio>
-            </el-radio-group>
+            <el-input v-model="form.fgender"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -37,8 +34,8 @@
         <el-col :span="12">
           <el-form-item :label="'是否合作商'">
             <el-radio-group v-model="form.officialWebsite">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
+              <el-radio :label="3">是</el-radio>
+              <el-radio :label="6">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -46,7 +43,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'基础合作费'">
-            <el-input v-model="form.price"></el-input>
+            <el-input v-model="form.address"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -55,10 +52,10 @@
           <el-form-item :label="'职位'">
             <el-select v-model="form.fduty" placeholder="请选择">
               <el-option
-                v-for="item in dutyList"
-                :key="item.fid"
-                :label="item.fdutyname"
-                :value="item.fid">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -67,10 +64,10 @@
           <el-form-item :label="'部门'">
             <el-select v-model="form.fdept" placeholder="请选择">
               <el-option
-                v-for="item in organizationsList"
-                :key="item.fid"
-                :label="item.fdeptname"
-                :value="item.fid">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -81,10 +78,10 @@
           <el-form-item :label="'带教老师'">
             <el-select v-model="form.fteacher" placeholder="请选择">
               <el-option
-                v-for="item in userList"
-                :key="item.uid"
-                :label="item.username"
-                :value="item.uid">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -93,10 +90,10 @@
           <el-form-item :label="'上级领导'">
             <el-select v-model="form.fheader" placeholder="请选择">
               <el-option
-                v-for="item in userList"
-                :key="item.uid"
-                :label="item.username"
-                :value="item.uid">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -107,10 +104,10 @@
           <el-form-item :label="'下级职员'">
             <el-select v-model="form.companyAddress" placeholder="请选择">
               <el-option
-                v-for="item in userList"
-                :key="item.uid"
-                :label="item.username"
-                :value="item.uid">
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -144,8 +141,8 @@
         <el-col :span="12">
           <el-form-item :label="'是否固定工资'">
             <el-radio-group v-model="form.officialWebsite">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
+              <el-radio :label="3">是</el-radio>
+              <el-radio :label="6">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -255,13 +252,49 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      :visible.sync="visible"
+      title="微信用户"
+      v-if="visible"
+      :width="'50%'"
+      destroy-on-close
+      append-to-body
+    >
+      <el-form ref="postform" label-width="80px" :size="'mini'">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label-width="0">
+              <el-input v-model="username" placeholder="名称">
+                <el-button slot="append" icon="el-icon-search" @click="fetchFormat"></el-button>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :span="20">
+          <el-col :span="24">
+            <el-table class="list-main" height="200px" :data="list" border size="mini" :highlight-current-row="true"
+                      @row-dblclick="dblclick">
+              <el-table-column
+                v-for="(t,i) in columns"
+                :key="i"
+                align="center"
+                :prop="t.name"
+                :label="t.text"
+                v-if="t.default!=undefined?t.default:true"
+                :width="t.width?t.width:''"
+              ></el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
     <div slot="footer" style="text-align:center">
       <el-button type="primary" @click="saveData('form')">保存</el-button>
     </div>
   </div>
 </template>
 
-<script>import {addUsers, alterUsers, getUsersList,getDutyList,getOrganizationsList} from '@/api/basic/index'
+<script>import {addUsers, alterUsers, clerkInfo} from '@/api/basic/index'
 
 export default {
   props: {
@@ -273,19 +306,15 @@ export default {
   data() {
     return {
       form: {
-        fnumber: null,
-        username: null,
-        fgender: '男',
-        fphone: null,
+        eid: null,
+        jobNum: null,
         address: null,
-        fduty: null,
-        fdept: null,
-        fteacher: null,
-        fheader: null,
-        companyAddress: null,
-        fjoindate: null,
-        fregulardate: null,
-        fdeparturedate: null
+        tel: null,
+        uid: null,
+        disable: true,
+        username: null,
+        remark: null,
+        name: null// 名称
       },
       options: [{
         value: '选项1',
@@ -294,12 +323,26 @@ export default {
         value: '选项2',
         label: '选项2'
       }],
+      list: [],
+      columns: [
+        {text: '会员名称', name: 'username'},
+        {text: '微信号', name: 'wechatId'},
+        {text: '联系地址', name: 'adress'},
+        {text: '联系电话', name: 'phoneNumber'},
+        {text: '注册时间', name: 'createDatetime'},
+        {text: '最后登录时间', name: 'editDatetime'},
+        {text: '生日', name: 'birthday'},
+        {text: '性别', name: 'sex'},
+        {text: '描述', name: 'describes'}
+      ],
       disPl: true,
       visible: null,
       username: '',
-      userList: [],
-      dutyList: [],
-      organizationsList: [],
+      pidS: [],
+      levelFormat: [{name: '管理员', value: '0'}, {name: '生产企业', value: '1'}, {name: '打码平台', value: '2'}, {
+        name: '销售员',
+        value: '3'
+      }],
       rules: {
         jobNum: [
           {required: true, message: '请输入工号', trigger: 'blur'}
@@ -314,9 +357,6 @@ export default {
     }
   },
   mounted() {
-    this.getUsersArray()
-    this.getDutyArray()
-    this.getOrganizationsArray()
     if (this.listInfo) {
       this.form = this.listInfo
     }
@@ -345,29 +385,15 @@ export default {
         }
       })
     },
-    getUsersArray(val={}, data = {
-      pageNum: 1,
-      pageSize: 1000
-    }) {
-      getUsersList(data, val).then(res => {
-          this.userList = res.data.records
-        });
+    dblclick(obj) {
+      this.visible = false
+      this.form.wechatName = obj.username
+      this.form.uid = obj.uid
     },
-    getDutyArray(val={}, data = {
-      pageNum: 1,
-      pageSize: 1000
-    }) {
-      getDutyList(data, val).then(res => {
-        this.dutyList = res.data.records
-      });
-    },
-    getOrganizationsArray(val={}, data = {
-      pageNum: 1,
-      pageSize: 1000
-    }) {
-      getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
-      });
+    fetchData(val) {
+      clerkInfo(val).then(res => {
+        this.form = res.data
+      })
     }
   }
 }

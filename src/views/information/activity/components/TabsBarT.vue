@@ -53,14 +53,14 @@ methods: {
     this[method]()
   },
   Delivery() {
-    if (this.clickData.id) {
+    if (this.clickData.fid) {
       this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$emit('delList', [{
-        id: this.clickData.id
+        fid: this.clickData.fid
       }])
     }).catch(() => {
         this.$message({
@@ -76,7 +76,7 @@ methods: {
     }
   },
   handlerAlter() {
-    if (this.clickData.id) {
+    if (this.clickData.fid) {
       this.$emit('showDialog', this.clickData)
     } else {
       this.$message({
@@ -86,7 +86,7 @@ methods: {
     }
   },
   disable() {
-    if (this.clickData.eid) {
+    if (this.clickData.fid) {
       this.clickData.disable = true
       alterClerk(this.clickData).then(res => {
         if(res.flag) {
@@ -101,7 +101,7 @@ methods: {
     }
   },
   enable() {
-    if (this.clickData.eid) {
+    if (this.clickData.fid) {
       this.clickData.disable = false
       alterClerk(this.clickData).then(res => {
         if(res.flag){

@@ -4,24 +4,24 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门'" prop="fdept">
-            <el-select multiple v-model="form.fdept" placeholder="请选择">
+            <el-select style="width: 100%" multiple v-model="form.fdept" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in options"
+                :key="index"
+                :label="item.fdeptname"
+                :value="item.fid">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'业务人员'" prop="fsales">
-            <el-select multiple v-model="form.fsales" placeholder="请选择">
+            <el-select style="width: 100%" multiple v-model="form.fsales" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in usersList"
+                :key="index"
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -49,7 +49,7 @@
             <el-date-picker
               v-model="form.fstartdate"
               type="date"
-              style="width: auto"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -60,21 +60,22 @@
             <el-date-picker
               v-model="form.fenddate"
               type="date"
-              style="width: auto"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'回款银行'">
-            <el-select v-model="form.fbank" placeholder="请选择">
+            <el-input v-model="form.fbank"></el-input>
+           <!-- <el-select v-model="form.fbank" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -83,19 +84,19 @@
             <el-date-picker
               v-model="form.fstartdate"
               type="date"
-              style="width: auto"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'服务老师'" prop="fserice">
-            <el-select v-model="form.fserice" placeholder="请选择">
+            <el-select style="width: 100%"  v-model="form.fserice" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in usersList"
+                :key="index"
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -128,7 +129,7 @@
   </div>
 </template>
 
-<script>import {deleteSupplier} from '@/api/basic/index'
+<script>import {deleteSupplier,getOrganizationsList,getUsersList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -144,13 +145,7 @@ export default {
   },
   data() {
     return {
-      options: [{
-        value: '选项1',
-        label: '选项1'
-      }, {
-        value: '选项2',
-        label: '选项2'
-      }],
+      options: [],
       form: {
         fdept: null,
         fsales: null,
@@ -163,6 +158,7 @@ export default {
         fserice: null
       },
       list: [],
+      usersList: [],
       columns: [
         { text: '修改人', name: 'gpName' },
         { text: '修改时间', name: 'gpLevel'},
@@ -189,11 +185,29 @@ export default {
     }
   },
   mounted() {
+    this.fetchData()
+    this.fetchUserData()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    fetchData(val={}, data = {
+      pageNum: 1,
+      pageSize:  500
+    }) {
+      getOrganizationsList(data, val).then(res => {
+        this.options = res.data.records
+      });
+    },
+    fetchUserData(val={}, data = {
+      pageNum: 1,
+      pageSize:  500
+    }) {
+      getUsersList(data, val).then(res => {
+        this.usersList = res.data.records
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项

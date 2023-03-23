@@ -8,8 +8,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'是否计入业绩'" prop="companyAddress">
-            <el-radio-group v-model="form.officialWebsite">
+          <el-form-item :label="'是否计入业绩'">
+            <el-radio-group v-model="form.fisperformace">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="0">否</el-radio>
             </el-radio-group>

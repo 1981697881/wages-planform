@@ -15,11 +15,11 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'出生日期'" prop="fbirthdate">
+          <el-form-item :label="'出生日期'">
             <el-date-picker
               v-model="form.fbirthdate"
               type="date"
-              style="width: auto"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -43,17 +43,20 @@
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'性别'">
-            <el-input v-model="form.fsex"></el-input>
+            <el-radio-group v-model="form.fsex">
+              <el-radio :label="'男'">男</el-radio>
+              <el-radio :label="'女'">女</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'负责老师'">
-            <el-select v-model="form.fdesigner" placeholder="请选择">
+            <el-select  style="width: 100%" v-model="form.fdesigner" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in usersList"
+                :key="index"
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -61,12 +64,12 @@
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'业务员'">
-            <el-select v-model="form.fmanager" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.fmanager" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="(item,index) in usersList"
+                :key="index"
+                :label="item.username"
+                :value="item.uid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -87,18 +90,18 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'打版金额'">
-            <el-input v-model="form.fpatternamt"></el-input>
+            <el-input-number v-model="form.fpatternamt"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'抵扣打版金额'">
-            <el-input v-model="form.fusepatternamt"></el-input>
+            <el-input-number v-model="form.fusepatternamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'未抵扣金额'">
-            <el-input v-model="form.funpatteramt"></el-input>
+            <el-input-number v-model="form.funpatteramt"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -107,7 +110,7 @@
             <el-date-picker
               v-model="form.eur"
               type="date"
-              style="width: auto"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -140,7 +143,7 @@
   </div>
 </template>
 
-<script>import {addCustom} from '@/api/basic/index'
+<script>import {addCustom, getUsersList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -164,12 +167,21 @@ export default {
         label: '选项2'
       }],
       form: {
-        companyName: null,
-        companyAddress: null,
-        telephone: null,
-        officialWebsite: null,
-        remark: null,
+        fnumber: null,
+        fname: null,
+        fbirthdate: null,
+        fidno: null,
+        fage: null,
+        fsex: '男',
+        fdesigner: null,
+        fmanager: null,
+        fnote: null,
+        finternal: 0,
+        fpatternamt: null,
+        fusepatternamt: null,
+        funpatteramt: null
       },
+      usersList: [],
       list: [],
       columns: [
         { text: '修改人', name: 'fmanager' },
@@ -177,23 +189,32 @@ export default {
       ],
       disPl: true,
       rules: {
-        companyName: [
+        fnumber: [
           {required: true, message: '请输入', trigger: 'blur'}
-        ], telephone: [
+        ], fname: [
           {required: true, message: '请输入', trigger: 'blur'}
         ],
-        companyAddress: [
+        telephone: [
           {required: true, message: '请输入', trigger: 'blur'}
         ]
       }
     }
   },
   mounted() {
+    this.fetchUserData()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    fetchUserData(val={}, data = {
+      pageNum: 1,
+      pageSize:  500
+    }) {
+      getUsersList(data, val).then(res => {
+        this.usersList = res.data.records
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项
