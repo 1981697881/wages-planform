@@ -261,7 +261,7 @@
   </div>
 </template>
 
-<script>import {addUsers, alterUsers, getUsersList,getDutyList,getOrganizationsList} from '@/api/basic/index'
+<script>import {addTuser, getUsersList,getDutyList,getOrganizationsList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -329,17 +329,10 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          if (typeof (this.form.eid) != undefined && this.form.eid != null) {
-            alterUsers(this.form).then(res => {
+            addTuser(this.form).then(res => {
               this.$emit('hideDialog', false)
               this.$emit('uploadList')
             })
-          } else {
-            addUsers(this.form).then(res => {
-              this.$emit('hideDialog', false)
-              this.$emit('uploadList')
-            })
-          }
         } else {
           return false
         }

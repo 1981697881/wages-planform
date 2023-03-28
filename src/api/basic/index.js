@@ -125,7 +125,44 @@ export function delClerk(params) {
     method: 'delete',
   })
 }
-// 字典类别-获取列表
+// 员工管理-获取列表
+export function getTuserList(params, query) {
+  const url = '/tuser/tuserList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 员工管理-新增
+export function addTuser(params) {
+  return request({
+    url: '/tuser/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 员工管理-删除
+export function deleteTuser(params) {
+  return request({
+    url: '/tuser/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}// 字典类别-获取列表
 export function getDictTypeList(params, query) {
   const url = '/dictType/dictTypeList/' + params.pageNum + '/' + params.pageSize
   return request({

@@ -15,7 +15,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getUsersList, delUsers } from '@/api/basic/index'
+import { getTuserList, deleteTuser } from '@/api/basic/index'
 import List from '@/components/List'
 
 export default {
@@ -62,7 +62,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      delUsers(val).then(res => {
+      deleteTuser(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -84,7 +84,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
-      getUsersList(data, val).then(res => {
+      getTuserList(data, val).then(res => {
         this.loading = false
         this.list = res.data
       })

@@ -11,24 +11,24 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'用户编码'" prop="jobNum">
-            <el-input v-model="form.jobNum" readOnly></el-input>
+            <el-input v-model="form.jobNum"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'登录账号'" prop="username">
-            <el-input v-model="form.username" :readOnly="visible"></el-input>
+            <el-input v-model="form.username"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="12">
+       <!-- <el-col :span="12">
           <el-form-item :label="'对应职员'" prop="eid">
             <el-select v-model="form.eid" filterable class="width-full" placeholder="请选择职员" @change="changeCheck">
               <el-option :label="t.name" :value="t.eid" v-for="(t,i) in levelFormat" :key="i"></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        </el-col>-->
+        <el-col :span="24">
           <el-form-item :label="'说明'">
             <el-input v-model="form.description"></el-input>
           </el-form-item>
@@ -148,7 +148,7 @@ export default {
   },
   mounted() {
     this.factchGroup()
-    this.fetchFormat()
+   // this.fetchFormat()
     this.fetchMenu()
   },
   methods: {
