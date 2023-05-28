@@ -26,7 +26,7 @@
 
 <script>
   import {mapGetters} from "vuex";
-  import {getUsersTree, delGroup} from "@/api/system/index";
+  import {getProgrammeList, deleteProgramme} from "@/api/commodity/index";
   import List from "@/components/List";
   export default {
     components: {
@@ -46,7 +46,7 @@
       return {
         loading: false,
         columns: [
-          {text: "工资项目显示方案", name: "gpName"},
+          {text: "工资项目显示方案", name: "fprogrammename"},
         ],
         list: {},
       }
@@ -60,25 +60,29 @@
     methods: {
       //监听单击某一行
       rowClick(obj) {
+        this.$emit('showList', obj.row);
         this.$store.dispatch("list/setClickData", obj.row);
       },
       Delivery(val) {
-        delGroup(val).then(res => {
+        deleteProgramme(val).then(res => {
           if(res.flag){
             this.$store.dispatch("list/setClickData", '');
             this.fetchData()
           }
         })
       },
-      fetchData() {
+      fetchData(val={}, data = {
+        /*  fid: fid,
+          type: type,*/
+        pageNum: this.list.current || 1,
+        pageSize: this.list.size || 50
+      }) {
         this.loading = true;
-        getUsersTree().then(res => {
+        getProgrammeList(data,val).then(res => {
           this.loading = false;
-          this.list ={
-            records: res.data
-          }
+          this.list =res.data;
         });
-      }
+      },
     }
   };
 </script>

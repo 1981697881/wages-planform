@@ -1,6 +1,6 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+    <el-form v-model="search" :size="'mini'">
       <el-button-group style="float:right">
        <!-- <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary"
                    :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}
@@ -94,7 +94,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({

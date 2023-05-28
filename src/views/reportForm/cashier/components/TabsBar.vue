@@ -1,67 +1,132 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
-      <el-row :gutter="10">
-        <el-col :span="4">
-          <el-form-item :label="'关键字'">
-            <el-input v-model="search.name" placeholder="名称"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="2">
-          <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
-        </el-col>
-        <el-button-group style="float:right">
-          <!--<el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handlerAdd">新增</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
-          <!--<el-button :size="'mini'" type="primary" icon="el-icon-error" @click="disable" >禁用</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-success" @click="enable" >启用</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
-        </el-button-group>
-      </el-row>
+    <el-form v-model="search" :size="'mini'">
+      <el-col :span="5" style="display: inline-block">
+        <el-form-item :label="''">
+          <el-date-picker
+            style="width: 100%"
+            v-model="value"
+            type="daterange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </el-form-item>
+      </el-col>
+      <!--<el-col :span="4">
+        <el-form-item :label="''" >
+          <el-select v-model="fapplicabledepartment" placeholder="部门">
+            <el-option
+              v-for="item in organizationsList"
+              :key="item.fid"
+              :label="item.fdeptname"
+              :value="item.fdeptname">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>-->
+      <el-col :span="2">
+        <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
+      </el-col>
+      <el-button-group style="float:right">
+        <!-- <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary"
+                    :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}
+         </el-button>-->
+        <!--@click="printer"-->
+        <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="exportData">导出</el-button>
+        <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+      </el-button-group>
     </el-form>
   </div>
 </template>
-<script>
-import { mapGetters } from 'vuex'
-import { alterClerk } from '@/api/basic/index'
+
+<script>import { mapGetters } from 'vuex'
 import { getByUserAndPrId } from '@/api/system/index'
+import { getToken } from '@/utils/auth'
+import { getOrganizationsList } from '@/api/basic/index'
 export default {
-  components: {},
-  computed: {
-    ...mapGetters(['node','clickData','selections'])
+  components: {
   },
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      value: '',
+      organizationsList: [],
       btnList: [],
+      headers: {
+        'authorization': getToken('waprx')
+      },
+      fileUrl: '',
       search: {
-        name: null
+        name: '',
+        fapplicabledepartment: '',
+        type: 1
       }
-    };
+    }
+  },
+  computed: {
+    ...mapGetters(['node', 'clickData', 'selections'])
   },
   mounted() {
+    this.getOrganizationsArray()
     /*let path = this.$route.meta.id
     getByUserAndPrId(path).then(res => {
       this.btnList = res.data
-      this.$forceUpdate();
-    });*/
+      this.$forceUpdate()
+    })*/
   },
   methods: {
+    getOrganizationsArray(val={}, data = {
+      pageNum: 1,
+      pageSize: 1000
+    }) {
+      getOrganizationsList(data, val).then(res => {
+        this.organizationsList = res.data.records
+      });
+    },
     onFun(method) {
       console.log(method)
       this[method]()
     },
     Delivery() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', [{
-            id: this.clickData.id
-          }])
+          this.$emit('delList', {
+            fid: this.clickData.fid
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -76,7 +141,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({

@@ -1,6 +1,6 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+    <el-form v-model="search" :size="'mini'">
       <el-button-group style="float:right">
         <!--<el-dropdown v-for="(t,i) in btnList" :key="i" v-if="t.category == 'multi'" @command="onFun(t.path, $event)" trigger="click">
           <el-button :size="'mini'" type="primary">
@@ -88,8 +88,9 @@ export default {
       }
     },
     handlerAlter(command) {
+      console.log(command)
       if (command == '1') {
-        if (this.clickData.gpId) {
+        if (this.clickData.fid) {
           this.$emit('showGroupDialog', this.clickData)
         } else {
           this.$message({
@@ -98,9 +99,8 @@ export default {
           })
         }
       } else if (command == '2') {
-        console.log(this.clickData)
-        if (this.clickData.uid) {
-          this.$emit('showDialog', { uid: this.clickData.uid })
+        if (this.clickData.fid) {
+          this.$emit('showDialog', this.clickData)
         } else {
           this.$message({
             message: '无选中行',
@@ -113,7 +113,7 @@ export default {
       this.$emit('uploadAll')
     },
     disable() {
-      if (this.clickData.uid) {
+      if (this.clickData.fid) {
         this.clickData.disable = true
         this.clickData.status = 2
         alterUsers(this.clickData).then(res => {
@@ -129,7 +129,7 @@ export default {
       }
     },
     enable() {
-      if (this.clickData.uid) {
+      if (this.clickData.fid) {
         this.clickData.disable = false
         this.clickData.status = 0
         alterUsers(this.clickData).then(res => {
@@ -148,15 +148,15 @@ export default {
       this.$emit('showDialog')
     },
     Delivery() {
-      if (this.clickData.id) {
-        this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
+      if (this.clickData.fid) {
+        this.$confirm('是否删除（' + this.clickData.fname + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', [{
-          id: this.clickData.id
-        }])
+          this.$emit('delList', {
+          fid: this.clickData.fid
+        })
       }).catch(() => {
           this.$message({
           type: 'info',
@@ -170,8 +170,8 @@ export default {
         })
       }
     },
-    handlerAlter() {
-      if (this.clickData.id) {
+   /* handlerAlter() {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({
@@ -179,7 +179,7 @@ export default {
           type: 'warning'
         })
       }
-    },
+    },*/
     handlerDel(command) {
       if (command == '1') {
         if (this.clickData.gpId) {
@@ -202,13 +202,13 @@ export default {
           })
         }
       } else if (command == '2') {
-        if (this.clickData.uid) {
+        if (this.clickData.fid) {
           this.$confirm('是否删除（' + this.clickData.empName + '），删除后将无法恢复?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$emit('delList', this.clickData.uid)
+            this.$emit('delList', this.clickData.fid)
           }).catch(() => {
             this.$message({
               type: 'info',

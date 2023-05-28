@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
-      <el-table :data="list" border height="250px" ref="multipleTable" @selection-change="handleSelectionChange"
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
+      <el-table :data="list" border height="250px" ref="multipleTable"
       stripe size="mini" :highlight-current-row="true">
       <el-table-column align="center" type="selection"></el-table-column>
       <el-table-column

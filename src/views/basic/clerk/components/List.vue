@@ -31,7 +31,7 @@ export default {
       list: {},
       columns: [
         { text: '工号', name: 'fnumber' },
-        { text: '用户名称', name: 'username' },
+        { text: '用户名称', name: 'fname' },
         { text: '联系电话', name: 'fphone' },
         { text: '邮箱', name: 'tel' },
         { text: '岗位', name: 'tel' },

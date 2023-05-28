@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="110px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门'" prop="fdept">
@@ -9,7 +9,7 @@
                 v-for="(item,index) in options"
                 :key="index"
                 :label="item.fdeptname"
-                :value="item.fid">
+                :value="item.fdeptname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -20,8 +20,8 @@
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -35,7 +35,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'介绍费'">
-            <el-input-number v-model="form.fcommision"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fcommision"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -49,6 +49,7 @@
             <el-date-picker
               v-model="form.fstartdate"
               type="date"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
@@ -60,6 +61,7 @@
             <el-date-picker
               v-model="form.fenddate"
               type="date"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
@@ -84,6 +86,7 @@
             <el-date-picker
               v-model="form.fstartdate"
               type="date"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
@@ -95,8 +98,8 @@
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -105,7 +108,11 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'分成信息'">
-            <el-table :data="list" border height="250px" ref="multipleTable" @selection-change="handleSelectionChange"
+            <div style="margin-top:20px;margin-bottom: 20px">
+              <el-button @click="setRow">增加</el-button>
+              <el-button @click="delRow">删除</el-button>
+            </div>
+            <el-table :data="form.supplierDivList" border height="250px" ref="multipleTable"
             stripe size="mini" :highlight-current-row="true">
             <el-table-column align="center" type="selection"></el-table-column>
             <el-table-column
@@ -114,8 +121,6 @@
               align="center"
               :prop="t.name"
               :label="t.text"
-              :width="t.width?t.width:(selfAdaption?'':'120px')"
-              v-if="t.default!=undefined?t.default:true"
             ></el-table-column>
           </el-table>
           </el-form-item>
@@ -123,13 +128,39 @@
       </el-row>
 
     </el-form>
+    <el-dialog
+      :visible.sync="visible"
+      title="编辑"
+      v-if="visible"
+      :width="'20%'"
+      destroy-on-close
+      append-to-body
+    >
+      <el-form ref="postform" :model="postform" :size="'mini'" :rules="rules">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item :label="'项目类型'">
+              <el-input v-model="postform.ftype"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'分成比例'">
+              <el-input v-model="postform.fdivrate"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" style="text-align:center;">
+        <el-button type="primary" @click="confirmData('postform')">确定</el-button>
+      </div>
+    </el-dialog>
     <div slot="footer" style="text-align:center">
       <el-button type="primary" @click="saveData('form')">保存</el-button>
     </div>
   </div>
 </template>
 
-<script>import {deleteSupplier,getOrganizationsList,getUsersList} from '@/api/basic/index'
+<script>import {addSupplier,getOrganizationsList,getTuserList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -155,13 +186,19 @@ export default {
         fstartdate: null,
         fenddate: null,
         fbank: null,
-        fserice: null
+        fserice: null,
+        supplierDivList: []
       },
+      postform: {
+        ftype: null,
+        fdivrate: null,
+      },
+      visible: null,
       list: [],
       usersList: [],
       columns: [
-        { text: '修改人', name: 'gpName' },
-        { text: '修改时间', name: 'gpLevel'},
+        { text: '项目类型', name: 'ftype' },
+        { text: '分成比例', name: 'fdivrate'},
       ],
       disPl: true,
       rules: {
@@ -189,9 +226,47 @@ export default {
     this.fetchUserData()
     if (this.listInfo) {
       this.form = this.listInfo
+      this.form.fsales = this.form.fsales.split(",");
+      this.form.fdept = this.form.fdept.split(",");
+
     }
   },
   methods: {
+    setRow() {
+      this.postform = {
+        ftype: null,
+        fdivrate: null,
+      }
+      this.visible = true
+    },
+    delRow() {
+      if(this.multipleSelection.length>0){
+        this.multipleSelection.forEach((item)=>{
+          this.form.supplierDivList.splice(item)
+        })
+      }else{
+        this.$message({
+          message: "请选择删除项",
+          type: 'error'
+        });
+      }
+    },
+    confirmData(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          const postForm = {...this.postform}
+          if(this.form.supplierDivList.findIndex(item =>item.ftype == postForm.ftype) == -1){
+            this.form.supplierDivList.push(postForm)
+            this.visible = false
+          }else{
+            this.$message({
+              message: "已存在相同项",
+              type: 'error'
+            });
+          }
+        }
+      })
+    },
     fetchData(val={}, data = {
       pageNum: 1,
       pageSize:  500
@@ -204,7 +279,7 @@ export default {
       pageNum: 1,
       pageSize:  500
     }) {
-      getUsersList(data, val).then(res => {
+      getTuserList(data, val).then(res => {
         this.usersList = res.data.records
       });
     },
@@ -212,7 +287,9 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          deleteSupplier(this.form).then(res => {
+          this.form.fsales = this.form.fsales.join(",");
+          this.form.fdept = this.form.fdept.join(",");
+          addSupplier(this.form).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })
@@ -227,3 +304,4 @@ export default {
 
 <style>
 </style>
+                                                                                               

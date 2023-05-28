@@ -154,7 +154,84 @@ export function deleteProjectFinance(params) {
     method: 'POST',
     data: params
   })
-}// 销售方案-获取列表
+}
+// 项目操作-获取列表
+export function getProjectOperationMessageList(params, query) {
+  const url = '/projectOperation/projectOperationMessageList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 项目操作-新增
+export function addProjectOperation(params) {
+  return request({
+    url: '/projectOperation/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 项目操作-删除
+export function deleteProjectOperation(params) {
+  return request({
+    url: '/projectOperation/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}// 使用耗材-获取列表
+export function getProjectMaterialList(params, query) {
+  const url = '/projectMaterial/projectMaterialList/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+
+// 使用耗材-新增
+export function addProjectMaterial(params) {
+  return request({
+    url: '/projectMaterial/add',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 使用耗材-删除
+export function deleteProjectMaterial(params) {
+  return request({
+    url: '/projectMaterial/delete',
+    headers: {
+      'authorization': getToken('waprx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+
+// 销售方案-获取列表
 export function getSalePrjList(params, query) {
   const url = '/salePrj/salePrjList/' + params.pageNum + '/' + params.pageSize
   return request({

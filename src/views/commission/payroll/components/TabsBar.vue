@@ -1,6 +1,6 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+    <el-form v-model="search" :size="'mini'">
       <el-button-group style="float:right">
         <!--<el-dropdown v-for="(t,i) in btnList" :key="i" v-if="t.category == 'multi'" @command="onFun(t.path, $event)" trigger="click">
           <el-button :size="'mini'" type="primary">
@@ -75,7 +75,7 @@ export default {
       } else if (command == '2') {
         console.log(this.clickData)
         if (this.clickData.uid) {
-          this.$emit('showDialog', { uid: this.clickData.uid })
+          this.$emit('showDialog', { ufid: this.clickData.uid })
         } else {
           this.$message({
             message: '无选中行',
@@ -121,13 +121,13 @@ export default {
     },
     handlerDel(command) {
       if (command == '1') {
-        if (this.clickData.gpId) {
-          this.$confirm('是否删除（' + this.clickData.gpName + '），删除后将无法恢复?', '提示', {
+        if (this.clickData.fid) {
+          this.$confirm('是否删除（' + this.clickData.fprogrammename + '），删除后将无法恢复?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$emit('delGroup', this.clickData.gpId)
+            this.$emit('delGroup', {fid: this.clickData.fid})
           }).catch(() => {
             this.$message({
               type: 'info',

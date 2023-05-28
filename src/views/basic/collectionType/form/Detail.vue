@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'收款类型'" prop="ftype">
@@ -9,9 +9,9 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'是否计入业绩'">
-            <el-radio-group v-model="form.fisperformace">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
+            <el-radio-group style="width: 100%" v-model="form.fisperformace">
+              <el-radio :label="'是'">是</el-radio>
+              <el-radio :label="'否'">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>

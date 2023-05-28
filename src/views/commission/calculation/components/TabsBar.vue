@@ -1,9 +1,36 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+    <el-form v-model="search" :size="'mini'">
       <el-row :gutter="10">
+        <el-col :span="5" style="display: inline-block">
+          <el-form-item :label="''">
+            <el-date-picker
+              style="width: 100%"
+              v-model="value"
+              type="daterange"
+              :picker-options="pickerOptions"
+              range-separator="至"
+              value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
         <el-col :span="4">
-          <el-form-item :label="'关键字'">
+          <el-form-item :label="''" >
+            <el-select v-model="fapplicabledepartment" placeholder="部门">
+              <el-option
+                v-for="item in organizationsList"
+                :key="item.fid"
+                :label="item.fdeptname"
+                :value="item.fdeptname">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item :label="''">
             <el-input v-model="search.name" placeholder="名称"/>
           </el-form-item>
         </el-col>
@@ -30,6 +57,7 @@
 import { mapGetters } from 'vuex'
 import { alterClerk } from '@/api/basic/index'
 import { getByUserAndPrId } from '@/api/system/index'
+import { getOrganizationsList } from '@/api/basic/index'
 export default {
   components: {},
   computed: {
@@ -37,6 +65,35 @@ export default {
   },
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      value: '',
+      organizationsList: [],
       btnList: [],
       search: {
         name: null
@@ -44,6 +101,7 @@ export default {
     };
   },
   mounted() {
+    this.getOrganizationsArray()
     /*let path = this.$route.meta.id
     getByUserAndPrId(path).then(res => {
       this.btnList = res.data
@@ -51,20 +109,28 @@ export default {
     });*/
   },
   methods: {
+    getOrganizationsArray(val={}, data = {
+      pageNum: 1,
+      pageSize: 1000
+    }) {
+      getOrganizationsList(data, val).then(res => {
+        this.organizationsList = res.data.records
+      });
+    },
     onFun(method) {
       console.log(method)
       this[method]()
     },
     Delivery() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', [{
-            id: this.clickData.id
-          }])
+          this.$emit('delList', {
+            fid: this.clickData.fid
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -79,7 +145,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({

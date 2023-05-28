@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'档案号'" prop="fnumber">
@@ -19,6 +19,7 @@
             <el-date-picker
               v-model="form.fbirthdate"
               type="date"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
@@ -43,7 +44,7 @@
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'性别'">
-            <el-radio-group v-model="form.fsex">
+            <el-radio-group style="width: 100%" v-model="form.fsex">
               <el-radio :label="'男'">男</el-radio>
               <el-radio :label="'女'">女</el-radio>
             </el-radio-group>
@@ -55,8 +56,8 @@
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -68,8 +69,8 @@
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -82,26 +83,26 @@
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'店家员工'">
-            <el-radio-group v-model="form.finternal">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
+            <el-radio-group style="width: 100%" v-model="form.finternal">
+              <el-radio :label="'1'">是</el-radio>
+              <el-radio :label="'0'">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'打版金额'">
-            <el-input-number v-model="form.fpatternamt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fpatternamt"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'抵扣打版金额'">
-            <el-input-number v-model="form.fusepatternamt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fusepatternamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'未抵扣金额'">
-            <el-input-number v-model="form.funpatteramt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.funpatteramt"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -110,6 +111,7 @@
             <el-date-picker
               v-model="form.eur"
               type="date"
+              value-format="yyyy-MM-dd"
               style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
@@ -119,7 +121,7 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'修改记录'">
-            <el-table :data="list" border height="250px" ref="multipleTable" @selection-change="handleSelectionChange"
+            <el-table :data="form.customAlter" border height="250px" ref="multipleTable"
             stripe size="mini" :highlight-current-row="true">
             <el-table-column align="center" type="selection"></el-table-column>
             <el-table-column
@@ -143,7 +145,7 @@
   </div>
 </template>
 
-<script>import {addCustom, getUsersList} from '@/api/basic/index'
+<script>import {addCustom, getTuserList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -184,7 +186,7 @@ export default {
       usersList: [],
       list: [],
       columns: [
-        { text: '修改人', name: 'fmanager' },
+        { text: '修改人', name: 'name' },
         { text: '修改时间', name: 'falterdate'},
       ],
       disPl: true,
@@ -211,7 +213,7 @@ export default {
       pageNum: 1,
       pageSize:  500
     }) {
-      getUsersList(data, val).then(res => {
+      getTuserList(data, val).then(res => {
         this.usersList = res.data.records
       });
     },

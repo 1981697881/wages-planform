@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'咨询老师'" prop="fteacherid">
-            <el-select v-model="form.fteacherid" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.fteacherid" placeholder="请选择">
               <el-option
                 v-for="(item,index) in userList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -19,7 +19,8 @@
             <el-date-picker
               v-model="form.fdate"
               type="date"
-              style="width: auto"
+              value-format="yyyy-MM-dd"
+              style="width: 100%"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -28,23 +29,23 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'成交业绩'" >
-            <el-input-number v-model="form.fperformanceamt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fperformanceamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'沙龙场数'">
-            <el-input-number v-model="form.fsalons"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fsalons"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'沙龙费用'" >
-            <el-input-number v-model="form.fsalonamt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fsalonamt"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'出勤天数'">
-            <el-input-number v-model="form.fattenddays"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fattenddays"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
@@ -55,7 +56,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'退款业绩'">
-            <el-input-number v-model="form.fretamount"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fretamount"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -68,7 +69,7 @@
 </template>
 
 <script>import {addCooperationExp} from '@/api/information/index'
-import {getUsersList} from '@/api/basic/index'
+import {getTuserList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -118,7 +119,7 @@ export default {
       pageNum: 1,
       pageSize: 1000
     }) {
-      getUsersList(data, val).then(res => {
+      getTuserList(data, val).then(res => {
         this.userList = res.data.records
       });
     },

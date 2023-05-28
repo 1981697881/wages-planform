@@ -13,9 +13,8 @@
 
   </div>
 </template>
-
 <script>import { mapGetters } from 'vuex'
-import { getCompanyList, deleteCompany } from '@/api/basic/index'
+import { getProjectCommissionList, deleteProjectCommission } from '@/api/poject/index'
 import List from '@/components/List'
 
 export default {
@@ -30,12 +29,12 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '提成方案名称', name: 'companyName' },
-        { text: '日期', name: 'telephone' },
-        { text: '适用部门', name: 'officialWebsite' },
-        { text: '适用岗位', name: 'companyAddress' },
-        { text: '适用项目类型', name: 'remark' },
-        { text: '状态', name: 'status' }
+        { text: '提成方案名称', name: 'fschemename' },
+        { text: '日期', name: 'fdate' },
+        { text: '适用部门', name: 'fapplicabledepartment' },
+        { text: '适用岗位', name: 'fapplicableposition' },
+        { text: '适用项目类型', name: 'fapplicableprojecttypes' },
+        { text: '状态', name: 'fstatus' }
       ]
     }
   },
@@ -54,7 +53,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteCompany(val).then(res => {
+      deleteProjectCommission(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
@@ -75,11 +74,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getCompanyList(data, val).then(res => {
+      this.loading = true
+      getProjectCommissionList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      })*/
+      })
     }
   }
 }

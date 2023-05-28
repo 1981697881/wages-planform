@@ -9,7 +9,7 @@
     </div>
     <el-dialog
       :visible.sync="visible"
-      title="用户信息"
+      title="基本信息"
       v-if="visible"
       v-dialogDrag
       :width="'40%'"
@@ -20,7 +20,7 @@
     </el-dialog>
     <el-dialog
       :visible.sync="visible2"
-      title="用户组信息"
+      title="基本信息"
       v-if="visible2"
       v-dialogDrag
       :width="'40%'"

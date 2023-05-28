@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="150px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'职务名称'" prop="fdutyname">
@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'上级职务'">
-            <el-select v-model="form.fparentname" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.fparentname" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
                 :key="index"
@@ -23,7 +23,7 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'是否提成'">
-            <el-radio-group v-model="form.fiscomm">
+            <el-radio-group style="width: 100%" v-model="form.fiscomm">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="0">否</el-radio>
             </el-radio-group>

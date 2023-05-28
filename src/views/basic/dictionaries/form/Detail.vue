@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'类型'" prop="ftypeid">
-            <el-select v-model="form.ftypeid" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.ftypeid" placeholder="请选择">
               <el-option
                 v-for="(item,index) in tyepArray"
                 :key="index"
@@ -81,6 +81,9 @@ export default {
   },
   mounted() {
     this.fetchData();
+    if(this.listInfo){
+      this.form = this.listInfo
+    }
   },
   methods: {
     fetchData(val={}, data = {

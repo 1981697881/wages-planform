@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'产品编号'" prop="fnumber">
@@ -54,23 +54,23 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'单次价格'">
-            <el-input-number v-model="form.fprice"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fprice"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'数量'">
-            <el-input-number v-model="form.fqt"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fqt"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'疗程价格'">
-            <el-input-number v-model="form.fperiodprice"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fperiodprice"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'市场参考价'">
-            <el-input-number v-model="form.fsaleprice"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fsaleprice"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -89,7 +89,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'采购成本'">
-            <el-input-number v-model="form.fpurcost"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.fpurcost"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -108,7 +108,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'活动/赠送操作费(次)'">
-            <el-input-number v-model="form.ffiveaway"></el-input-number>
+            <el-input-number style="width: 100%" v-model="form.ffiveaway"></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -131,11 +131,17 @@ export default {
   data() {
     return {
       options: [{
-        value: '选项1',
-        label: '选项1'
+        value: '无创',
+        label: '无创'
       }, {
-        value: '选项2',
-        label: '选项2'
+        value: '美外',
+        label: '美外'
+      }, {
+        value: '抗衰',
+        label: '抗衰'
+      }, {
+        value: '大健康',
+        label: '大健康'
       }],
       typeOptions: [],
       form: {

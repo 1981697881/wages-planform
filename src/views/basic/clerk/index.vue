@@ -55,7 +55,7 @@ export default {
   methods: {
     delivery(obj) {
       if(obj) {
-        this.$refs.list.Delivery(obj.eid)
+        this.$refs.list.Delivery(obj)
       }
     },
     // 弹窗拖拽

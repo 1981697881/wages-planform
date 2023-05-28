@@ -1,11 +1,11 @@
 <template>
   <div class="app-list">
-    <a-tree ref="tree" class="list-tree" />
+    <a-tree ref="tree" @showList="handlerList" class="list-tree" />
     <div class="list-container">
       <div>
         <tabs-bar ref="tabs" @showDialog="handlerDialog" @delList="delList" @delGroup="delGroup" @uploadAll="uploadAll" @queryBtn="query" @showGroupDialog="groupDialog"  />
       </div>
-      <list ref="list" @showDialog="handlerDialog"  />
+      <list ref="list" @showDialog="handlerDialog" />
     </div>
     <el-dialog
       :visible.sync="visible"
@@ -53,12 +53,18 @@ export default {
     }
   },
   mounted() {
+    this.$refs.tree.fetchData()
     /*this.$refs.list.fetchData()
-    this.$refs.tree.fetchData()*/
+    */
   },
   methods: {
     hideWindow(val) {
       this.visible = val
+
+    },
+    handlerList(val) {
+      console.log(val)
+      this.$refs.list.fetchHead({fid: val.fid})
     },
     hideGroupWindow(val) {
       this.visible2 = val
@@ -85,8 +91,9 @@ export default {
     },
     // 更新列表
     uploadAll() {
-      this.$refs.list.uploadPr()
+
       this.$refs.tree.fetchData()
+      //this.$refs.list.uploadPr()
     },
     // 更新列表
     uploadGroup() {

@@ -1,9 +1,9 @@
 <template>
   <div class="list-header">
-    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+    <el-form v-model="search" :size="'mini'">
       <el-row :gutter="10">
         <el-col :span="4">
-          <el-form-item :label="'关键字'">
+          <el-form-item :label="''">
             <el-input v-model="search.name" placeholder="名称"/>
           </el-form-item>
         </el-col>
@@ -53,21 +53,21 @@ export default {
       this[method]()
     },
     Delivery() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', [{
-            id: this.clickData.id
-          }])
+          this.$emit('delList', {
+            fid: this.clickData.fid
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           });
-        });
+        })
       } else {
         this.$message({
           message: '无选中行',
@@ -76,7 +76,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.fid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({
@@ -126,6 +126,7 @@ export default {
     qFilter() {
       let obj = {}
       this.search.name != null && this.search.name != '' ? obj.companyName = this.search.name : null
+      obj.fschemename = 1
       return obj
     },
     handlerAdd(){

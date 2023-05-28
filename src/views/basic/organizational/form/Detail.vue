@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="150px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" :size="'mini'">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门名称'" prop="fdeptname">
@@ -9,12 +9,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'上级部门'">
-            <el-select v-model="form.fparentname" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.fparentname" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
                 :key="index"
                 :label="item.fdeptname"
-                :value="item.fid">
+                :value="item.fdeptname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -23,19 +23,19 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门负责人'" prop="fheader">
-            <el-select v-model="form.fheader" placeholder="请选择">
+            <el-select style="width: 100%" v-model="form.fheader" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
-                :label="item.username"
-                :value="item.uid">
+                :label="item.fname"
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'是否部门提成'">
-            <el-radio-group v-model="form.fisno">
+            <el-radio-group style="width: 100%" v-model="form.fisno">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="0">否</el-radio>
             </el-radio-group>
@@ -45,7 +45,7 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'参与提成收款类型'">
-            <el-radio-group v-model="form.fgettype">
+            <el-radio-group style="width: 100%" v-model="form.fgettype">
               <el-radio :label="'全款'">全款</el-radio>
               <el-radio :label="'活动'">活动</el-radio>
               <el-radio :label="'抵扣'">抵扣</el-radio>
@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script>import {addOrganizations,getOrganizationsList,getUsersList} from '@/api/basic/index'
+<script>import {addOrganizations,getOrganizationsList,getTuserList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -111,7 +111,7 @@ export default {
       pageNum: 1,
       pageSize:  500
     }) {
-      getUsersList(data, val).then(res => {
+      getTuserList(data, val).then(res => {
         this.usersList = res.data.records
       });
     },

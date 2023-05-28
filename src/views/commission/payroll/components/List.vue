@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getUsersList, delUsers} from "@/api/system/index";
+import { chooseProgramme, delUsers} from "@/api/commodity/index";
 import List from "@/components/List";
 
 export default {
@@ -33,14 +33,13 @@ export default {
       list: {},
       fid: null,
       type: null,
-        checkDate:null,
+      checkDate:null,
       columns: [
-        { text: "部门", name: "jobNum" },
+       /* { text: "部门", name: "jobNum" },
         { text: "名称", name: "username" },
         { text: "姓名", name: "empName" },
-          { text: "月份", name: "status" },
-        { text: "说明", name: "description" },
-
+        { text: "月份", name: "status" },
+        { text: "说明", name: "description" },*/
       ]
     };
   },
@@ -92,9 +91,16 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true;
-      getUsersList(data).then(res => {
+      chooseProgramme(data).then(res => {
         this.loading = false;
-        this.list = res.data;
+        this.list =res.data;
+      });
+    },
+    fetchHead(val) {
+      this.loading = true;
+      chooseProgramme(val).then(res => {
+        this.loading = false;
+        this.columns =res.data;
       });
     }
   }
