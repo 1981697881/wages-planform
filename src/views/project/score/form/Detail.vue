@@ -22,7 +22,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'适用部门'">
-            <el-select style="width: 100%" multiple v-model="form.fapplicabledepartment" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod3"
+                       :loading="loading" style="width: 100%" multiple v-model="form.fapplicabledepartment" placeholder="请选择">
               <el-option
                 v-for="item in organizationsList"
                 :key="item.fid"
@@ -34,7 +37,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'适用岗位'">
-            <el-select style="width: 100%" multiple v-model="form.fapplicableposition" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod2"
+                       :loading="loading" style="width: 100%" multiple v-model="form.fapplicableposition" placeholder="请选择">
               <el-option
                 v-for="item in dutyList"
                 :key="item.fid"
@@ -60,10 +66,13 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'适用人员'">
-            <el-select style="width: 100%" multiple v-model="form.fsuitpeople" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" multiple v-model="form.fsuitpeople" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -170,6 +179,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       options: [{
         value: '选项1',
         label: '选项1'
@@ -242,6 +252,30 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getUsersArray({fname: query});
+      } else {
+        this.userList = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getDutyArray({fdutyname: query});
+      } else {
+        this.dutyList = [];
+      }
+    },
+    remoteMethod3(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.organizationsList = [];
+      }
+    },
     myclass({ row, columnIndex }) {
       if (row[columnIndex] && !row[columnIndex].sfcb && row[columnIndex].sfcb != null ) {
         return "color: red";
@@ -319,12 +353,13 @@ export default {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-          this.form.fsuitpeople = this.form.fsuitpeople.join(',')
-          this.form.fapplicabledepartment = this.form.fapplicabledepartment.join(',')
-          this.form.fapplicableposition = this.form.fapplicableposition.join(',')
-          this.form.fapplicableprojecttypes = this.form.fapplicableprojecttypes.join(',')
-          this.form.datas = JSON.stringify(this.form.datas);
-          addProjectCommission(this.form).then(res => {
+          let params = {...this.form}
+          params.fsuitpeople = params.fsuitpeople.join(',')
+          params.fapplicabledepartment = params.fapplicabledepartment.join(',')
+          params.fapplicableposition = params.fapplicableposition.join(',')
+          params.fapplicableprojecttypes = params.fapplicableprojecttypes.join(',')
+          params.datas = JSON.stringify(params.datas);
+          addProjectCommission(params).then(res => {
             this.$emit('hideDialog', false)
             this.$emit('uploadList')
           })
@@ -334,33 +369,45 @@ export default {
       })
     },getProductionTypeArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getProductionTypeList(data, val).then(res => {
-        this.productionTypeList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.productionTypeList = res.data.records
+        }
       });
     },getUsersArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
-        this.userList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.userList = res.data.records
+        }
       });
     },
     getDutyArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getDutyList(data, val).then(res => {
-        this.dutyList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.dutyList = res.data.records
+        }
       });
     },
     getOrganizationsArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     }
   }

@@ -127,7 +127,7 @@ export default {
     // 查询条件过滤
     qFilter() {
       let obj = {}
-      this.search.name != null && this.search.name != '' ? obj.companyName = this.search.name : null
+      this.search.name != null && this.search.name != '' ? obj.fstatus = this.search.name : null
       obj.fschemename = 0
       return obj
     },

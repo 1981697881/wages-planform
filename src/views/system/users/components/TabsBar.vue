@@ -97,7 +97,7 @@ export default {
       } else if (command == '2') {
         console.log(this.clickData)
         if (this.clickData.uid) {
-          this.$emit('showDialog', { ufid: this.clickData.uid })
+          this.$emit('showDialog', { uid: this.clickData.uid })
         } else {
           this.$message({
             message: '无选中行',

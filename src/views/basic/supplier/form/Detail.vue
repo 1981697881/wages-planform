@@ -4,7 +4,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门'" prop="fdept">
-            <el-select style="width: 100%" multiple v-model="form.fdept" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod2"
+                       :loading="loading" style="width: 100%" multiple v-model="form.fdept" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
                 :key="index"
@@ -16,7 +19,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'业务人员'" prop="fsales">
-            <el-select style="width: 100%" multiple v-model="form.fsales" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" multiple v-model="form.fsales" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
@@ -55,9 +61,9 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20" prop="fenddate">
+      </el-row><el-row :gutter="20" >
         <el-col :span="12">
-          <el-form-item :label="'合同结束时间'">
+          <el-form-item :label="'合同结束时间'" prop="fenddate">
             <el-date-picker
               v-model="form.fenddate"
               type="date"
@@ -80,6 +86,12 @@
             </el-select>-->
           </el-form-item>
         </el-col>
+      </el-row><el-row :gutter="20" >
+        <el-col :span="24">
+          <el-form-item :label="'回款帐号'">
+            <el-input v-model="form.faccout"></el-input>
+          </el-form-item>
+        </el-col>
       </el-row><el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'启动日期'" prop="fstartdate">
@@ -94,7 +106,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'服务老师'" prop="fserice">
-            <el-select style="width: 100%"  v-model="form.fserice" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%"  v-model="form.fserice" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
@@ -177,12 +192,14 @@ export default {
   data() {
     return {
       options: [],
+      loading: false,
       form: {
         fdept: null,
         fsales: null,
         fname: null,
         fcommision: 0,
         fcommdiv: null,
+        faccout: null,
         fstartdate: null,
         fenddate: null,
         fbank: null,
@@ -228,10 +245,25 @@ export default {
       this.form = this.listInfo
       this.form.fsales = this.form.fsales.split(",");
       this.form.fdept = this.form.fdept.split(",");
-
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchUserData({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchData({fdeptname: query});
+      } else {
+        this.options = [];
+      }
+    },
     setRow() {
       this.postform = {
         ftype: null,
@@ -269,18 +301,24 @@ export default {
     },
     fetchData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.options = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.options = res.data.records
+        }
       });
     },
     fetchUserData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getTuserList(data, val).then(res => {
-        this.usersList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.usersList = res.data.records
+        }
       });
     },
     saveData(form) {

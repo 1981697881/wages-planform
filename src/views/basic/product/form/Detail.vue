@@ -16,7 +16,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'产品分类'" prop="ftype">
-            <el-select style="width: 100%" v-model="form.ftype" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.ftype" placeholder="请选择">
               <el-option
                 v-for="(item,index) in typeOptions"
                 :key="index"
@@ -35,14 +38,15 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'成交项目编码'" >
-            <el-select style="width: 100%" v-model="form.fprjectno" placeholder="请选择">
+            <el-input v-model="form.fprjectno"></el-input>
+            <!--<el-select style="width: 100%" v-model="form.fprjectno" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>-->
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -77,7 +81,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'项目类型'">
-            <el-select style="width: 100%" v-model="form.fprojecttype" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fprojecttype" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -163,6 +170,7 @@ export default {
         ffiveaway: null
       },
       disPl: true,
+      loading: false,
       rules: {
         fnumber: [
           {required: true, message: '请输入', trigger: 'blur'}
@@ -179,15 +187,32 @@ export default {
     this.fetchData()
     if (this.listInfo) {
       this.form = this.listInfo
+      this.form.fqt= this.form.fqt ==null? 0:this.form.fqt
+      this.form.fperiodprice= this.form.fperiodprice ==null? 0:this.form.fperiodprice
+      this.form.fprice= this.form.fprice ==null? 0:this.form.fprice
+      this.form.fsaleprice= this.form.fsaleprice ==null? 0:this.form.fsaleprice
+      this.form.fpurcost= this.form.fpurcost ==null? 0:this.form.fpurcost
+      this.form.ffiveaway= this.form.ffiveaway ==null? 0:this.form.ffiveaway
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchData({ftype: query});
+      } else {
+        this.typeOptions = [];
+      }
+    },
     fetchData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getProductionTypeList(data, val).then(res => {
-        this.typeOptions = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.typeOptions = res.data.records
+        }
       });
     },
     saveData(form) {

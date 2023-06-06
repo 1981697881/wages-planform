@@ -9,7 +9,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'上级类型'">
-            <el-select style="width: 100%"  v-model="form.fparentid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%"  v-model="form.fparentid" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
                 :key="index"
@@ -38,6 +41,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       form: {
         ftype: null,
         fparentid: null,
@@ -58,12 +62,23 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchData({ftype: query});
+      } else {
+        this.options = [];
+      }
+    },
     fetchData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getProductionTypeList(data, val).then(res => {
-        this.options = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.options = res.data.records
+        }
       });
     },
     saveData(form) {

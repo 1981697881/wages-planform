@@ -8,7 +8,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'顾客姓名'" prop="fname">
+          <el-form-item :label="'顾客姓名'">
             <el-input v-model="form.fname"></el-input>
           </el-form-item>
         </el-col>
@@ -30,7 +30,8 @@
             <el-input v-model="form.fidno"></el-input>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'联系电话'" prop="telephone">
             <el-input v-model="form.telephone"></el-input>
@@ -41,7 +42,8 @@
             <el-input v-model="form.fage"></el-input>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'性别'">
             <el-radio-group style="width: 100%" v-model="form.fsex">
@@ -52,7 +54,11 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'负责老师'">
-            <el-select  style="width: 100%" v-model="form.fdesigner" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading"
+                       class="width-full" style="width: 100%" v-model="form.fdesigner" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
@@ -62,10 +68,14 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'业务员'">
-            <el-select style="width: 100%" v-model="form.fmanager" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fmanager" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
@@ -80,7 +90,8 @@
             <el-input v-model="form.fnote"></el-input>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'店家员工'">
             <el-radio-group style="width: 100%" v-model="form.finternal">
@@ -94,7 +105,8 @@
             <el-input-number style="width: 100%" v-model="form.fpatternamt"></el-input-number>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'抵扣打版金额'">
             <el-input-number style="width: 100%" v-model="form.fusepatternamt"></el-input-number>
@@ -105,7 +117,8 @@
             <el-input-number style="width: 100%" v-model="form.funpatteramt"></el-input-number>
           </el-form-item>
         </el-col>
-      </el-row><el-row :gutter="20">
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'调整日期'">
             <el-date-picker
@@ -122,18 +135,18 @@
         <el-col :span="24">
           <el-form-item :label="'修改记录'">
             <el-table :data="form.customAlter" border height="250px" ref="multipleTable"
-            stripe size="mini" :highlight-current-row="true">
-            <el-table-column align="center" type="selection"></el-table-column>
-            <el-table-column
-              v-for="(t,i) in columns"
-              :key="i"
-              align="center"
-              :prop="t.name"
-              :label="t.text"
-              :width="t.width?t.width:(selfAdaption?'':'120px')"
-              v-if="t.default!=undefined?t.default:true"
-            ></el-table-column>
-          </el-table>
+                      stripe size="mini" :highlight-current-row="true">
+              <el-table-column align="center" type="selection"></el-table-column>
+              <el-table-column
+                v-for="(t,i) in columns"
+                :key="i"
+                align="center"
+                :prop="t.name"
+                :label="t.text"
+                :width="t.width?t.width:(selfAdaption?'':'120px')"
+                v-if="t.default!=undefined?t.default:true"
+              ></el-table-column>
+            </el-table>
           </el-form-item>
         </el-col>
       </el-row>
@@ -161,6 +174,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       options: [{
         value: '选项1',
         label: '选项1'
@@ -186,8 +200,8 @@ export default {
       usersList: [],
       list: [],
       columns: [
-        { text: '修改人', name: 'name' },
-        { text: '修改时间', name: 'falterdate'},
+        {text: '修改人', name: 'name'},
+        {text: '修改时间', name: 'falterdate'},
       ],
       disPl: true,
       rules: {
@@ -209,12 +223,23 @@ export default {
     }
   },
   methods: {
-    fetchUserData(val={}, data = {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchUserData({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
+    fetchUserData(val = {}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
-        this.usersList = res.data.records
+        if(res.flag){
+          this.loading = false;
+          this.usersList = res.data.records
+        }
       });
     },
     saveData(form) {

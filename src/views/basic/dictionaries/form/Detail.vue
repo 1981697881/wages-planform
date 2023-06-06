@@ -91,7 +91,10 @@ export default {
       pageSize:  50
     }) {
       getDictTypeList(data, val).then(res => {
-        this.tyepArray = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.tyepArray = res.data.records
+        }
       });
     },
     saveData(form) {

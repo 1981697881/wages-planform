@@ -39,7 +39,7 @@
             <el-select style="width: 100%" v-model="form.fteacher" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -94,7 +94,7 @@
             <el-select style="width: 100%" v-model="form.fheader" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -106,7 +106,7 @@
             <el-select style="width: 100%" v-model="form.companyAddress" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -345,6 +345,7 @@ export default {
         {text: '描述', name: 'describes'}
       ],
       disPl: true,
+      loading: false,
       visible: null,
       username: '',
       pidS: [],
@@ -374,6 +375,30 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getUsersArray({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getDutyArray({fdutyname: query});
+      } else {
+        this.dutyList = [];
+      }
+    },
+    remoteMethod3(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.organizationsList = [];
+      }
+    },
     query() {
       this.visible = true
     },
@@ -393,26 +418,35 @@ export default {
 
     getUsersArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
-        this.userList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.userList = res.data.records
+        }
       });
     },
     getDutyArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getDutyList(data, val).then(res => {
-        this.dutyList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.dutyList = res.data.records
+        }
       });
     },
     getOrganizationsArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     }
   }

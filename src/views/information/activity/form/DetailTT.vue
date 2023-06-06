@@ -4,7 +4,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门'" prop="fdeptid">
-            <el-select style="width: 100%" v-model="form.fdeptid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod2"
+                       :loading="loading" style="width: 100%" v-model="form.fdeptid" placeholder="请选择">
               <el-option
                 v-for="item in organizationsList"
                 :key="item.fid"
@@ -16,7 +19,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'销售人员'" prop="fsalerid">
-            <el-select style="width: 100%" v-model="form.fsalerid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fsalerid" placeholder="请选择">
               <el-option
                 v-for="(item,index) in userList"
                 :key="index"
@@ -36,7 +42,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'方案'" prop="fsalerid">
-            <el-select style="width: 100%" v-model="form.fprjid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod3"
+                       :loading="loading" style="width: 100%" v-model="form.fprjid" placeholder="请选择">
               <el-option
                 v-for="(item,index) in salePrjList"
                 :key="index"
@@ -73,12 +82,15 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'门店'">
-            <el-select style="width: 100%" v-model="form.fsupplyid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod4"
+                       :loading="loading" style="width: 100%" v-model="form.fsupplyid" placeholder="请选择">
               <el-option
                 v-for="item in supplierList"
                 :key="item.fid"
                 :label="item.fname"
-                :value="item.fid">
+                :value="item.fname">
               </el-option>
             </el-select>
           </el-form-item>
@@ -103,8 +115,8 @@
   </div>
 </template>
 
-<script>import {addSalePrjList,getSalePrjList} from '@/api/information/index'
-import {getOrganizationsList, getTuserList,getSupplierList} from '@/api/basic/index'
+<script>import {addSalePrjList, getSalePrjList} from '@/api/information/index'
+import {getOrganizationsList, getTuserList, getSupplierList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -130,12 +142,13 @@ export default {
         fsupplyid: null,
       },
       disPl: true,
+      loading: false,
       rules: {
         fempid: [
           {required: true, message: '请选择', trigger: 'change'}
-        ],fsalerid: [
+        ], fsalerid: [
           {required: true, message: '请选择', trigger: 'change'}
-        ],fprjid: [
+        ], fprjid: [
           {required: true, message: '请选择', trigger: 'change'}
         ], fname: [
           {required: true, message: '请输入', trigger: 'blur'}
@@ -153,34 +166,78 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getUsersArray({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.organizationsList = [];
+      }
+    },
+    remoteMethod4(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getSupplier({fname: query});
+      } else {
+        this.supplierList = [];
+      }
+    },
+    remoteMethod3(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getSalePrjArray({fname: query});
+      } else {
+        this.salePrjList = [];
+      }
+    },
     getOrganizationsArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
-    },getSupplier(val = {}, data = {
+    }, getSupplier(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getSupplierList(data, val).then(res => {
-        this.supplierList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.supplierList = res.data.records
+        }
       });
     }, getSalePrjArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getSalePrjList(data, val).then(res => {
-        this.salePrjList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.salePrjList = res.data.records
+        }
       });
     },
     getUsersArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
-        this.userList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.userList = res.data.records
+        }
       });
     },
     saveData(form) {

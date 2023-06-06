@@ -107,7 +107,7 @@ export default {
   methods: {
     getOrganizationsArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
         this.organizationsList = res.data.records

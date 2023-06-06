@@ -52,6 +52,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -105,12 +106,23 @@ export default {
     })*/
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
     getOrganizationsArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     },
     /*let path = this.$route.meta.id

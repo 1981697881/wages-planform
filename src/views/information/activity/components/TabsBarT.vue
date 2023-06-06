@@ -125,7 +125,7 @@ methods: {
   // 查询条件过滤
   qFilter() {
     let obj = {}
-    this.search.name != null && this.search.name != '' ? obj.companyName = this.search.name : null
+    this.search.name != null && this.search.name != '' ? obj.fdeptid = this.search.name : null
     return obj
   },
   handlerAdd(){

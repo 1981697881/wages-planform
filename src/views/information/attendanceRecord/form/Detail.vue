@@ -4,7 +4,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'员工'" prop="fempid">
-            <el-select style="width: 100%" v-model="form.fempid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fempid" placeholder="请选择">
               <el-option
                 v-for="item in userList"
                 :key="item.fid"
@@ -83,6 +86,7 @@ export default {
         fyear: null,
       },
       disPl: true,
+      loading: false,
       rules: {
         fempid: [
           {required: true, message: '请选择', trigger: 'change'}
@@ -97,12 +101,23 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getUsersArray({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
     getUsersArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
-        this.userList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.userList = res.data.records
+        }
       });
     },
     saveData(form) {

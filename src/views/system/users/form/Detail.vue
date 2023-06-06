@@ -218,6 +218,7 @@ export default {
           this.list = res.data
           if (this.listInfo) {
             this.visible = true
+            console.log(this.listInfo)
             this.fetchData(this.listInfo.uid)
           }
         }

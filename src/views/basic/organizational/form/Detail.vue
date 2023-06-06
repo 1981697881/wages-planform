@@ -9,7 +9,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'上级部门'">
-            <el-select style="width: 100%" v-model="form.fparentname" placeholder="请选择">
+            <el-select  filterable
+                        remote
+                        :remote-method="remoteMethod"
+                        :loading="loading" style="width: 100%" v-model="form.fparentname" placeholder="请选择">
               <el-option
                 v-for="(item,index) in options"
                 :key="index"
@@ -23,7 +26,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门负责人'" prop="fheader">
-            <el-select style="width: 100%" v-model="form.fheader" placeholder="请选择">
+            <el-select  filterable
+                        remote
+                        :remote-method="remoteMethod2"
+                        :loading="loading" style="width: 100%" v-model="form.fheader" placeholder="请选择">
               <el-option
                 v-for="(item,index) in usersList"
                 :key="index"
@@ -71,6 +77,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       form: {
         fdeptname: null,
         fparentname: null,
@@ -99,20 +106,41 @@ export default {
     }
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchUserData({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchData({fdeptname: query});
+      } else {
+        this.options = [];
+      }
+    },
     fetchData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.options = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.options = res.data.records
+        }
       });
     },
     fetchUserData(val={}, data = {
       pageNum: 1,
-      pageSize:  500
+      pageSize:  10
     }) {
       getTuserList(data, val).then(res => {
-        this.usersList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.usersList = res.data.records
+        }
       });
     },
     saveData(form) {

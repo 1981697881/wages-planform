@@ -4,7 +4,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'部门'" prop="fdeptid">
-            <el-select style="width: 100%" v-model="form.fdeptid" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fdeptid" placeholder="请选择">
               <el-option
                 v-for="item in organizationsList"
                 :key="item.fid"
@@ -22,13 +25,13 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'方案名称'">
-            <el-input v-model="form.fnumber"></el-input>
+          <el-form-item :label="'方案内容'">
+            <el-input v-model="form.fdesc"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'方案号'">
-            <el-input v-model="form.fdesc"></el-input>
+            <el-input v-model="form.fnumber"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -123,27 +126,29 @@ export default {
     }
   },
   mounted() {
-    /* this.getUsersArray();*/
     this.getOrganizationsArray()
     if (this.listInfo) {
       this.form = this.listInfo
     }
   },
   methods: {
+    remoteMethod3(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.organizationsList = [];
+      }
+    },
     getOrganizationsArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
-      });
-    },
-    getUsersArray(val = {}, data = {
-      pageNum: 1,
-      pageSize: 1000
-    }) {
-      getTuserList(data, val).then(res => {
-        this.userList = res.data.records
+        if(res.flag){
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     },
     saveData(form) {

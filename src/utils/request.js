@@ -130,11 +130,29 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    if(error == 'Error: Request failed with status code 403'){
+      store.dispatch('user/resetToken').then(() => {
+        //location.reload()
+        MessageBox('登录出错, 是否重试?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          location.reload()
+        }).catch(() => {
+          Message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+      })
+    }else{
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
     /* store.dispatch('user/resetToken').then(() => {
        location.reload()
      })*/

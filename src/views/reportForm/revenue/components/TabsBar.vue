@@ -18,7 +18,10 @@
       </el-col>
       <el-col :span="4">
         <el-form-item :label="''" >
-          <el-select v-model="fapplicabledepartment" placeholder="部门">
+          <el-select filterable
+                     remote
+                     :remote-method="remoteMethod"
+                     :loading="loading" v-model="fapplicabledepartment" placeholder="部门">
             <el-option
               v-for="item in organizationsList"
               :key="item.fid"
@@ -82,6 +85,7 @@ export default {
       },
       value: '',
       organizationsList: [],
+      loading: false,
       btnList: [],
       headers: {
         'authorization': getToken('waprx')
@@ -106,12 +110,23 @@ export default {
     })*/
   },
   methods: {
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
     getOrganizationsArray(val={}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if(res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     },
     // 导出

@@ -36,10 +36,13 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'带教老师'">
-            <el-select style="width: 100%" v-model="form.fteacher" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fteacher" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -65,7 +68,10 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'职位'">
-            <el-select style="width: 100%" v-model="form.fduty" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod2"
+                       :loading="loading" style="width: 100%" v-model="form.fduty" placeholder="请选择">
               <el-option
                 v-for="item in dutyList"
                 :key="item.fid"
@@ -77,7 +83,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'部门'">
-            <el-select style="width: 100%" v-model="form.fdept" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod3"
+                       :loading="loading" style="width: 100%" v-model="form.fdept" placeholder="请选择">
               <el-option
                 v-for="item in organizationsList"
                 :key="item.fid"
@@ -91,10 +100,13 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'上级领导'">
-            <el-select style="width: 100%" v-model="form.fheader" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.fheader" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -103,10 +115,13 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'下级职员'">
-            <el-select style="width: 100%" v-model="form.companyAddress" placeholder="请选择">
+            <el-select filterable
+                       remote
+                       :remote-method="remoteMethod"
+                       :loading="loading" style="width: 100%" v-model="form.companyAddress" placeholder="请选择">
               <el-option
                 v-for="item in userList"
-                :key="item.uid"
+                :key="item.fid"
                 :label="item.fname"
                 :value="item.fname">
               </el-option>
@@ -260,7 +275,7 @@
   </div>
 </template>
 
-<script>import {addTuser, getTuserList,getDutyList,getOrganizationsList} from '@/api/basic/index'
+<script>import {addTuser, getTuserList, getDutyList, getOrganizationsList} from '@/api/basic/index'
 
 export default {
   props: {
@@ -271,6 +286,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       form: {
         fnumber: null,
         fname: null,
@@ -324,41 +340,74 @@ export default {
     query() {
       this.visible = true
     },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getUsersArray({fname: query});
+      } else {
+        this.usersList = [];
+      }
+    },
+    remoteMethod2(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getDutyArray({fdutyname: query});
+      } else {
+        this.dutyList = [];
+      }
+    },
+    remoteMethod3(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.getOrganizationsArray({fdeptname: query});
+      } else {
+        this.organizationsList = [];
+      }
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项
         if (valid) {
-            addTuser(this.form).then(res => {
-              this.$emit('hideDialog', false)
-              this.$emit('uploadList')
-            })
+          addTuser(this.form).then(res => {
+            this.$emit('hideDialog', false)
+            this.$emit('uploadList')
+          })
         } else {
           return false
         }
       })
     },
-    getUsersArray(val={}, data = {
+    getUsersArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
     }) {
       getTuserList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
           this.userList = res.data.records
-        });
-    },
-    getDutyArray(val={}, data = {
-      pageNum: 1,
-      pageSize: 1000
-    }) {
-      getDutyList(data, val).then(res => {
-        this.dutyList = res.data.records
+        }
       });
     },
-    getOrganizationsArray(val={}, data = {
+    getDutyArray(val = {}, data = {
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 10
+    }) {
+      getDutyList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
+          this.dutyList = res.data.records
+        }
+      });
+    },
+    getOrganizationsArray(val = {}, data = {
+      pageNum: 1,
+      pageSize: 10
     }) {
       getOrganizationsList(data, val).then(res => {
-        this.organizationsList = res.data.records
+        if (res.flag) {
+          this.loading = false;
+          this.organizationsList = res.data.records
+        }
       });
     }
   }
